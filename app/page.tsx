@@ -4,7 +4,8 @@ import { useState, useCallback, useRef } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, BookOpen, Cross } from "lucide-react";
+import Link from "next/link";
+import { AlertCircle, ArrowLeft, BookOpen, Cross, Home as HomeIcon } from "lucide-react";
 import type { PrayerStyle, PrayerLength } from "@/lib/prompt";
 
 interface GeneratedResult {
@@ -75,9 +76,21 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="w-10" />
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              href="https://ifunlove.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors min-w-0 flex-1 justify-start"
+              aria-label="回到 ifunlove.com 主頁"
+            >
+              <ArrowLeft className="h-4 w-4 shrink-0" />
+              <span className="flex sm:hidden">
+                <HomeIcon className="h-5 w-5 shrink-0" />
+              </span>
+              <span className="hidden sm:inline truncate">ifunlove.com</span>
+            </Link>
+            <div className="flex items-center gap-3 shrink-0">
               <div className="p-2 rounded-full bg-primary/10">
                 <Cross className="h-6 w-6 text-primary" />
               </div>
@@ -85,7 +98,7 @@ export default function Home() {
                 為你禱告
               </h1>
             </div>
-            <div className="w-10" />
+            <div className="flex-1 min-w-0" aria-hidden />
           </div>
         </div>
       </header>
