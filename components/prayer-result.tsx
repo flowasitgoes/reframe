@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,8 +9,8 @@ import {
   Check,
   Download,
   RefreshCw,
-  Volume2,
-  VolumeX,
+  // Volume2,
+  // VolumeX,
   AlertTriangle,
   Heart,
 } from "lucide-react";
@@ -34,11 +34,12 @@ export function PrayerResult({
 }: PrayerResultProps) {
   const [copiedReframe, setCopiedReframe] = useState(false);
   const [copiedPrayer, setCopiedPrayer] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [currentSpeaking, setCurrentSpeaking] = useState<
-    "reframe" | "prayer" | null
-  >(null);
-  const speechRef = useRef<SpeechSynthesisUtterance | null>(null);
+  // 朗讀功能暫時停用（聲音品質不佳）
+  // const [isSpeaking, setIsSpeaking] = useState(false);
+  // const [currentSpeaking, setCurrentSpeaking] = useState<
+  //   "reframe" | "prayer" | null
+  // >(null);
+  // const speechRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const copyToClipboard = useCallback(
     async (text: string, type: "reframe" | "prayer") => {
@@ -79,65 +80,53 @@ export function PrayerResult({
     [result]
   );
 
-  const speak = useCallback(
-    (text: string, type: "reframe" | "prayer") => {
-      if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-        return;
-      }
-
-      // Stop current speech if any
-      window.speechSynthesis.cancel();
-
-      if (isSpeaking && currentSpeaking === type) {
-        setIsSpeaking(false);
-        setCurrentSpeaking(null);
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.85;
-      utterance.pitch = 1;
-      utterance.lang = "zh-TW";
-
-      // Try to get a Chinese voice
-      const voices = window.speechSynthesis.getVoices();
-      const chineseVoice = voices.find(
-        (v) =>
-          v.lang.includes("zh-TW") ||
-          v.lang.includes("zh-Hant") ||
-          v.lang.includes("zh-CN") ||
-          v.name.includes("Chinese")
-      );
-      if (chineseVoice) {
-        utterance.voice = chineseVoice;
-      }
-
-      utterance.onend = () => {
-        setIsSpeaking(false);
-        setCurrentSpeaking(null);
-      };
-
-      utterance.onerror = () => {
-        setIsSpeaking(false);
-        setCurrentSpeaking(null);
-      };
-
-      speechRef.current = utterance;
-      setIsSpeaking(true);
-      setCurrentSpeaking(type);
-      window.speechSynthesis.speak(utterance);
-    },
-    [isSpeaking, currentSpeaking]
-  );
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
+  // 朗讀功能暫時停用（聲音品質不佳）
+  // const speak = useCallback(
+  //   (text: string, type: "reframe" | "prayer") => {
+  //     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+  //       return;
+  //     }
+  //     window.speechSynthesis.cancel();
+  //     if (isSpeaking && currentSpeaking === type) {
+  //       setIsSpeaking(false);
+  //       setCurrentSpeaking(null);
+  //       return;
+  //     }
+  //     const utterance = new SpeechSynthesisUtterance(text);
+  //     utterance.rate = 0.85;
+  //     utterance.pitch = 1;
+  //     utterance.lang = "zh-TW";
+  //     const voices = window.speechSynthesis.getVoices();
+  //     const chineseVoice = voices.find(
+  //       (v) =>
+  //         v.lang.includes("zh-TW") ||
+  //         v.lang.includes("zh-Hant") ||
+  //         v.lang.includes("zh-CN") ||
+  //         v.name.includes("Chinese")
+  //     );
+  //     if (chineseVoice) utterance.voice = chineseVoice;
+  //     utterance.onend = () => {
+  //       setIsSpeaking(false);
+  //       setCurrentSpeaking(null);
+  //     };
+  //     utterance.onerror = () => {
+  //       setIsSpeaking(false);
+  //       setCurrentSpeaking(null);
+  //     };
+  //     speechRef.current = utterance;
+  //     setIsSpeaking(true);
+  //     setCurrentSpeaking(type);
+  //     window.speechSynthesis.speak(utterance);
+  //   },
+  //   [isSpeaking, currentSpeaking]
+  // );
+  // useEffect(() => {
+  //   return () => {
+  //     if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  //       window.speechSynthesis.cancel();
+  //     }
+  //   };
+  // }, []);
 
   return (
     <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
@@ -184,16 +173,13 @@ export function PrayerResult({
               選擇讓你感覺好的思維
             </CardTitle>
             <div className="flex gap-2">
+              {/* 朗讀功能暫時停用
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => speak(result.reframe, "reframe")}
                 className="text-muted-foreground hover:text-foreground"
-                title={
-                  isSpeaking && currentSpeaking === "reframe"
-                    ? "停止"
-                    : "朗讀"
-                }
+                title={isSpeaking && currentSpeaking === "reframe" ? "停止" : "朗讀"}
               >
                 {isSpeaking && currentSpeaking === "reframe" ? (
                   <VolumeX className="h-4 w-4" />
@@ -201,6 +187,7 @@ export function PrayerResult({
                   <Volume2 className="h-4 w-4" />
                 )}
               </Button>
+              */}
               <Button
                 variant="ghost"
                 size="sm"
@@ -231,14 +218,13 @@ export function PrayerResult({
               垂聽我禱告的神
             </CardTitle>
             <div className="flex gap-2">
+              {/* 朗讀功能暫時停用
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => speak(result.prayer, "prayer")}
                 className="text-muted-foreground hover:text-foreground"
-                title={
-                  isSpeaking && currentSpeaking === "prayer" ? "停止" : "朗讀"
-                }
+                title={isSpeaking && currentSpeaking === "prayer" ? "停止" : "朗讀"}
               >
                 {isSpeaking && currentSpeaking === "prayer" ? (
                   <VolumeX className="h-4 w-4" />
@@ -246,6 +232,7 @@ export function PrayerResult({
                   <Volume2 className="h-4 w-4" />
                 )}
               </Button>
+              */}
               <Button
                 variant="ghost"
                 size="sm"

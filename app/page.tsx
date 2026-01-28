@@ -158,13 +158,10 @@ export default function Home() {
         {/* Footer */}
         <footer className="max-w-2xl mx-auto mt-16 pt-8 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            「為你禱告」傾聽您的心情記錄並以正向的心態轉換為禱告，
+            「為你禱告」傾聽您的心情記錄並以正向心態轉換為禱告，
           </p>
           <p className="text-sm text-muted-foreground mt-4">
-            每天都可以享受生活呦。
-          </p>
-          <p className="text-sm text-muted-foreground mt-4">
-            多多和朋友家人相聚，談心，到戶外走走，
+            多多和朋友家人相聚、談心、玩樂，到戶外走走，
           </p>
           <p className="text-sm text-muted-foreground mt-4">
             做一些讓自己開心的事。
