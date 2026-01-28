@@ -1,0 +1,74 @@
+{
+  "home": {
+    "siteName": "Pray for You",
+    "backToHome": "Back to ifunlove.com",
+    "heroTitle": "Turn your feelings into blessings",
+    "heroSubtitle": "Write down how you feel today. We’ll reframe your thoughts and create a prayer just for you.",
+    "sectionReflection": "Today’s reflection",
+    "footer1": "“Pray for You” turns your reflections into encouragement and prayer.",
+    "footer2": "Spend time with family and friends, talk, have fun, get outside,",
+    "footer3": "and do things that bring you joy."
+  },
+  "form": {
+    "reflectionLabel": "Write your thoughts",
+    "reflectionHint": "Share what happened today, how you feel, what you’re thankful or worried about. Your words will be turned into blessings and prayer.",
+    "reflectionPlaceholder": "Today I feel... / I’m going through... / I have been...",
+    "charCount": "{count} / 4000",
+    "charMinHint": "(at least 20 characters)",
+    "styleLabel": "Prayer style",
+    "lengthLabel": "Prayer length",
+    "styles": {
+      "gentle": { "label": "Gentle comfort", "description": "Soft, comforting words" },
+      "victorious": { "label": "Victorious", "description": "Strong and confident" },
+      "gratitude": { "label": "Thanksgiving", "description": "Focus on grace and blessing" },
+      "morning": { "label": "Morning hope", "description": "Welcome the new day" },
+      "night": { "label": "Evening rest", "description": "Release burdens and rest" }
+    },
+    "lengths": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Full"
+    },
+    "submitLoading": "Please wait...",
+    "submitDefault": "Pray for me"
+  },
+  "result": {
+    "safetyTitle": "We care about you",
+    "safetyMessage": "If you’re going through a difficult time, know that someone is willing to listen. You deserve support and care.",
+    "reframeTitle": "A perspective that feels good",
+    "prayerTitle": "God who hears my prayer",
+    "blessingTitle": "Blessing",
+    "copyTitle": "Copy",
+    "regenerate": "Regenerate",
+    "downloadTxt": "Download TXT",
+    "downloadBlessingJpg": "Download blessing card JPG",
+    "downloadingJpg": "Generating…",
+    "myPrayer": "My prayer",
+    "downloadFilenamePrayer": "prayer",
+    "downloadFilenameBlessing": "blessing-card",
+    "madeBy": "Made with Pray for You",
+    "madeByShort": "Made with Pray for You",
+    "reframeHeading": "A perspective that feels good",
+    "prayerHeading": "Prayer",
+    "blessingHeading": "Blessing"
+  },
+  "apiKey": {
+    "settingsAria": "API settings",
+    "modalTitle": "OpenRouter API Key",
+    "modalDescription": "Enter your OpenRouter API Key to enable prayer generation. Your key is stored only in this browser and is not sent to our servers.",
+    "apiKeyLabel": "API Key",
+    "save": "Save",
+    "saved": "Saved",
+    "clear": "Clear",
+    "noKeyYet": "Don’t have an API Key yet?",
+    "goToOpenRouter": "Get one from OpenRouter"
+  },
+  "errors": {
+    "generationFailed": "Something went wrong while generating your prayer.",
+    "pleaseRetry": "Something went wrong. Please try again later."
+  },
+  "locale": {
+    "zh": "中文",
+    "en": "English"
+  }
+}

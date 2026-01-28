@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata, Viewport } from "next";
 import { Lora, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { LocaleProvider } from "@/context/locale";
 import "./globals.css";
 
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
@@ -94,8 +95,10 @@ export default function RootLayout({
       <body
         className={`${lora.variable} ${inter.variable} font-sans antialiased`}
       >
-        {children}
-        <Analytics />
+        <LocaleProvider>
+          {children}
+          <Analytics />
+        </LocaleProvider>
       </body>
     </html>
   );

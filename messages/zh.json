@@ -1,0 +1,74 @@
+{
+  "home": {
+    "siteName": "為你禱告",
+    "backToHome": "回到 ifunlove.com 主頁",
+    "heroTitle": "將你的心情化為祝福",
+    "heroSubtitle": "寫下今天的心情與想法，讓我們為你重新框架觀點，並創作一篇專屬於你的禱告。",
+    "sectionReflection": "今日心情記錄",
+    "footer1": "「為你禱告」傾聽您的心情記錄並以正向心態轉換為禱告，",
+    "footer2": "多多和朋友家人相聚、談心、玩樂，到戶外走走，",
+    "footer3": "做一些讓自己開心的事。"
+  },
+  "form": {
+    "reflectionLabel": "寫下你的心情",
+    "reflectionHint": "分享今天發生的事、你的感受、擔憂或感恩的事。這些文字將被轉化為祝福與禱告。",
+    "reflectionPlaceholder": "今天我感到... / 我正在經歷... / 我心裡有些...",
+    "charCount": "{count} / 4000 字",
+    "charMinHint": "（至少 20 個字）",
+    "styleLabel": "禱告風格",
+    "lengthLabel": "禱告長度",
+    "styles": {
+      "gentle": { "label": "溫柔安慰", "description": "柔和撫慰的話語" },
+      "victorious": { "label": "得勝宣告", "description": "充滿力量與信心" },
+      "gratitude": { "label": "感恩讚美", "description": "專注恩典與祝福" },
+      "morning": { "label": "晨間盼望", "description": "迎接新的一天" },
+      "night": { "label": "夜間安息", "description": "釋放重擔、安歇" }
+    },
+    "lengths": {
+      "short": "簡短",
+      "medium": "中等",
+      "long": "完整"
+    },
+    "submitLoading": "好的，請靜候一下...",
+    "submitDefault": "請幫我禱告"
+  },
+  "result": {
+    "safetyTitle": "我們在乎你",
+    "safetyMessage": "如果你正在經歷困難的時刻，請知道有人願意傾聽。你值得被支持與幫助。",
+    "reframeTitle": "選擇讓你感覺好的思維",
+    "prayerTitle": "垂聽我禱告的神",
+    "blessingTitle": "祝福小語",
+    "copyTitle": "複製",
+    "regenerate": "重新生成",
+    "downloadTxt": "下載 TXT",
+    "downloadBlessingJpg": "下載祝福卡片 JPG",
+    "downloadingJpg": "生成中…",
+    "myPrayer": "我的禱告",
+    "downloadFilenamePrayer": "禱告",
+    "downloadFilenameBlessing": "祝福卡片",
+    "madeBy": "由 為你禱告 製作",
+    "madeByShort": "由「為你禱告」製作",
+    "reframeHeading": "選擇讓你感覺好的思維",
+    "prayerHeading": "禱告",
+    "blessingHeading": "祝福小語"
+  },
+  "apiKey": {
+    "settingsAria": "API 設定",
+    "modalTitle": "OpenRouter API Key",
+    "modalDescription": "輸入你的 OpenRouter API Key 來啟用禱告生成功能。你的 Key 只會儲存在本機瀏覽器中，不會傳送到我們的伺服器。",
+    "apiKeyLabel": "API Key",
+    "save": "儲存",
+    "saved": "已儲存",
+    "clear": "清除",
+    "noKeyYet": "還沒有 API Key？",
+    "goToOpenRouter": "前往 OpenRouter 申請"
+  },
+  "errors": {
+    "generationFailed": "生成禱告時發生錯誤",
+    "pleaseRetry": "發生錯誤，請稍後再試。"
+  },
+  "locale": {
+    "zh": "中文",
+    "en": "English"
+  }
+}

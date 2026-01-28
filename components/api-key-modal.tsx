@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Settings, Key, Check, ExternalLink } from "lucide-react";
+import { useTranslations } from "@/context/locale";
 
 const API_KEY_STORAGE_KEY = "prayforYou_openrouter_key";
 
@@ -22,6 +23,7 @@ export function getStoredApiKey(): string | null {
 }
 
 export function ApiKeyModal() {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [saved, setSaved] = useState(false);
@@ -60,7 +62,7 @@ export function ApiKeyModal() {
           variant="ghost"
           size="icon"
           className="relative"
-          aria-label="API 設定"
+          aria-label={t("apiKey.settingsAria")}
         >
           <Settings className="h-5 w-5" />
           {hasKey && (
@@ -72,17 +74,16 @@ export function ApiKeyModal() {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Key className="h-5 w-5 text-primary" />
-            OpenRouter API Key
+            {t("apiKey.modalTitle")}
           </DialogTitle>
           <DialogDescription>
-            輸入你的 OpenRouter API Key 來啟用禱告生成功能。你的 Key
-            只會儲存在本機瀏覽器中，不會傳送到我們的伺服器。
+            {t("apiKey.modalDescription")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 pt-4">
           <div className="space-y-2">
-            <Label htmlFor="api-key">API Key</Label>
+            <Label htmlFor="api-key">{t("apiKey.apiKeyLabel")}</Label>
             <Input
               id="api-key"
               type="password"
@@ -102,22 +103,22 @@ export function ApiKeyModal() {
               {saved ? (
                 <>
                   <Check className="h-4 w-4 mr-2" />
-                  已儲存
+                  {t("apiKey.saved")}
                 </>
               ) : (
-                "儲存"
+                t("apiKey.save")
               )}
             </Button>
             {hasKey && (
               <Button variant="outline" onClick={handleClear}>
-                清除
+                {t("apiKey.clear")}
               </Button>
             )}
           </div>
 
           <div className="pt-2 border-t border-border">
             <p className="text-sm text-muted-foreground mb-2">
-              還沒有 API Key？
+              {t("apiKey.noKeyYet")}
             </p>
             <a
               href="https://openrouter.ai/keys"
@@ -125,7 +126,7 @@ export function ApiKeyModal() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
             >
-              前往 OpenRouter 申請
+              {t("apiKey.goToOpenRouter")}
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>

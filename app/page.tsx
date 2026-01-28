@@ -3,10 +3,12 @@
 import { useState, useCallback, useRef } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import Image from "next/image";
 import { AlertCircle, ArrowLeft, BookOpen, Home as HomeIcon } from "lucide-react";
+import { useTranslations } from "@/context/locale";
 import type { PrayerStyle, PrayerLength } from "@/lib/prompt";
 
 interface GeneratedResult {
@@ -25,6 +27,7 @@ interface FormData {
 }
 
 export default function Home() {
+  const t = useTranslations();
   const [result, setResult] = useState<GeneratedResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +49,7 @@ export default function Home() {
       const json = await response.json();
 
       if (!response.ok) {
-        throw new Error(json.error || "生成禱告時發生錯誤");
+        throw new Error(json.error || t("errors.generationFailed"));
       }
 
       setResult(json);
@@ -60,12 +63,12 @@ export default function Home() {
       }, 100);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "發生錯誤，請稍後再試。"
+        err instanceof Error ? err.message : t("errors.pleaseRetry")
       );
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   const handleRegenerate = useCallback(() => {
     if (lastFormData.current) {
@@ -84,7 +87,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors min-w-0 flex-1 justify-start"
-              aria-label="回到 ifunlove.com 主頁"
+              aria-label={t("home.backToHome")}
             >
               <ArrowLeft className="h-4 w-4 shrink-0" />
               <span className="flex sm:hidden">
@@ -103,10 +106,12 @@ export default function Home() {
                 />
               </div>
               <h1 className="text-2xl md:text-3xl font-serif font-medium text-foreground">
-                為你禱告
+                {t("home.siteName")}
               </h1>
             </div>
-            <div className="flex-1 min-w-0" aria-hidden />
+            <div className="flex flex-1 min-w-0 items-center justify-end gap-1" aria-hidden>
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
       </header>
@@ -115,10 +120,10 @@ export default function Home() {
         {/* Hero Section */}
         <section className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-serif text-foreground mb-4 text-balance">
-            將你的心情化為祝福
+            {t("home.heroTitle")}
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            寫下今天的心情與想法，讓我們為你重新框架觀點，並創作一篇專屬於你的禱告。
+            {t("home.heroSubtitle")}
           </p>
         </section>
 
@@ -128,7 +133,7 @@ export default function Home() {
             <div className="flex items-center gap-2 mb-6">
               <BookOpen className="h-5 w-5 text-primary" />
               <h3 className="text-xl font-medium text-foreground">
-                今日心情記錄
+                {t("home.sectionReflection")}
               </h3>
             </div>
 
@@ -159,13 +164,13 @@ export default function Home() {
         {/* Footer */}
         <footer className="max-w-2xl mx-auto mt-16 pt-8 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            「為你禱告」傾聽您的心情記錄並以正向心態轉換為禱告，
+            {t("home.footer1")}
           </p>
           <p className="text-sm text-muted-foreground mt-4">
-            多多和朋友家人相聚、談心、玩樂，到戶外走走，
+            {t("home.footer2")}
           </p>
           <p className="text-sm text-muted-foreground mt-4">
-            做一些讓自己開心的事。
+            {t("home.footer3")}
           </p>
           {/* <p className="text-sm text-muted-foreground mt-4">
             如果你正在經歷危機，請撥打{" "}

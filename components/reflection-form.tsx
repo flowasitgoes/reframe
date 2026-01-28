@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader2, Sparkles } from "lucide-react";
+import { useTranslations } from "@/context/locale";
 import type { PrayerStyle, PrayerLength } from "@/lib/prompt";
 
 interface ReflectionFormProps {
@@ -19,41 +18,11 @@ interface ReflectionFormProps {
   isLoading: boolean;
 }
 
-const styles: { value: PrayerStyle; label: string; description: string }[] = [
-  {
-    value: "gentle",
-    label: "溫柔安慰",
-    description: "柔和撫慰的話語",
-  },
-  {
-    value: "victorious",
-    label: "得勝宣告",
-    description: "充滿力量與信心",
-  },
-  {
-    value: "gratitude",
-    label: "感恩讚美",
-    description: "專注恩典與祝福",
-  },
-  {
-    value: "morning",
-    label: "晨間盼望",
-    description: "迎接新的一天",
-  },
-  {
-    value: "night",
-    label: "夜間安息",
-    description: "釋放重擔、安歇",
-  },
-];
-
-const lengths: { value: PrayerLength; label: string }[] = [
-  { value: "short", label: "簡短" },
-  { value: "medium", label: "中等" },
-  { value: "long", label: "完整" },
-];
+const styleKeys: PrayerStyle[] = ["gentle", "victorious", "gratitude", "morning", "night"];
+const lengthKeys: PrayerLength[] = ["short", "medium", "long"];
 
 export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
+  const t = useTranslations();
   const [reflection, setReflection] = useState("");
   const [style, setStyle] = useState<PrayerStyle>("gentle");
   const [length, setLength] = useState<PrayerLength>("medium");
@@ -75,14 +44,14 @@ export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
           htmlFor="reflection"
           className="text-lg font-medium text-foreground"
         >
-          寫下你的心情
+          {t("form.reflectionLabel")}
         </Label>
         <p className="text-sm text-muted-foreground">
-          分享今天發生的事、你的感受、擔憂或感恩的事。這些文字將被轉化為祝福與禱告。
+          {t("form.reflectionHint")}
         </p>
         <Textarea
           id="reflection"
-          placeholder="今天我感到... / 我正在經歷... / 我心裡有些..."
+          placeholder={t("form.reflectionPlaceholder")}
           value={reflection}
           onChange={(e) => setReflection(e.target.value)}
           className="min-h-[180px] resize-none bg-card border-border focus:border-primary transition-colors text-base leading-relaxed"
@@ -98,10 +67,10 @@ export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
                   : "text-primary"
             }
           >
-            {charCount} / 4000 字
+            {t("form.charCount", { count: String(charCount) })}
             {charCount < 20 && charCount > 0 && (
               <span className="text-muted-foreground ml-2">
-                （至少 20 個字）
+                {t("form.charMinHint")}
               </span>
             )}
           </span>
@@ -109,31 +78,31 @@ export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
       </div>
 
       <div className="space-y-4">
-        <Label className="text-lg font-medium text-foreground">禱告風格</Label>
+        <Label className="text-lg font-medium text-foreground">{t("form.styleLabel")}</Label>
         <RadioGroup
           value={style}
           onValueChange={(v) => setStyle(v as PrayerStyle)}
           className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
           disabled={isLoading}
         >
-          {styles.map((s) => (
+          {styleKeys.map((key) => (
             <Label
-              key={s.value}
-              htmlFor={s.value}
+              key={key}
+              htmlFor={key}
               className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 cursor-pointer transition-all hover:border-primary/50 ${
-                style === s.value
+                style === key
                   ? "border-primary bg-primary/5"
                   : "border-border bg-card"
               }`}
             >
               <RadioGroupItem
-                value={s.value}
-                id={s.value}
+                value={key}
+                id={key}
                 className="sr-only"
               />
-              <span className="font-medium text-foreground">{s.label}</span>
+              <span className="font-medium text-foreground">{t(`form.styles.${key}.label`)}</span>
               <span className="text-xs text-muted-foreground text-center mt-1">
-                {s.description}
+                {t(`form.styles.${key}.description`)}
               </span>
             </Label>
           ))}
@@ -141,29 +110,29 @@ export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
       </div>
 
       <div className="space-y-4">
-        <Label className="text-lg font-medium text-foreground">禱告長度</Label>
+        <Label className="text-lg font-medium text-foreground">{t("form.lengthLabel")}</Label>
         <RadioGroup
           value={length}
           onValueChange={(v) => setLength(v as PrayerLength)}
           className="flex gap-3"
           disabled={isLoading}
         >
-          {lengths.map((l) => (
+          {lengthKeys.map((key) => (
             <Label
-              key={l.value}
-              htmlFor={`length-${l.value}`}
+              key={key}
+              htmlFor={`length-${key}`}
               className={`flex items-center justify-center px-6 py-3 rounded-lg border-2 cursor-pointer transition-all hover:border-primary/50 ${
-                length === l.value
+                length === key
                   ? "border-primary bg-primary/5"
                   : "border-border bg-card"
               }`}
             >
               <RadioGroupItem
-                value={l.value}
-                id={`length-${l.value}`}
+                value={key}
+                id={`length-${key}`}
                 className="sr-only"
               />
-              <span className="font-medium text-foreground">{l.label}</span>
+              <span className="font-medium text-foreground">{t(`form.lengths.${key}`)}</span>
             </Label>
           ))}
         </RadioGroup>
@@ -178,12 +147,12 @@ export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            好的，請靜候一下...
+            {t("form.submitLoading")}
           </>
         ) : (
           <>
             <Sparkles className="mr-2 h-5 w-5" />
-            請幫我禱告
+            {t("form.submitDefault")}
           </>
         )}
       </Button>
