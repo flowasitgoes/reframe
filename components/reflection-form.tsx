@@ -178,12 +178,12 @@ export function ReflectionForm({ onSubmit, isLoading }: ReflectionFormProps) {
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            正在生成禱告...
+            好的，請靜候一下...
           </>
         ) : (
           <>
             <Sparkles className="mr-2 h-5 w-5" />
-            生成禱告
+            請幫我禱告
           </>
         )}
       </Button>

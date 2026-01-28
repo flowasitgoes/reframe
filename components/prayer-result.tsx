@@ -63,8 +63,8 @@ export function PrayerResult({
       const title = result.title || "我的禱告";
       const content =
         format === "md"
-          ? `# ${title}\n\n## 選擇讓你感覺好的思維\n\n${result.reframe}\n\n## 禱告\n\n${result.prayer}\n\n---\n\n*由 為你禱告 生成*`
-          : `${title}\n${"=".repeat(title.length * 2)}\n\n【選擇讓你感覺好的思維】\n${result.reframe}\n\n【禱告】\n${result.prayer}\n\n---\n由「為你禱告」生成`;
+          ? `# ${title}\n\n## 選擇讓你感覺好的思維\n\n${result.reframe}\n\n## 禱告\n\n${result.prayer}\n\n---\n\n*由 為你禱告 製作*`
+          : `${title}\n${"=".repeat(title.length * 2)}\n\n【選擇讓你感覺好的思維】\n${result.reframe}\n\n【禱告】\n${result.prayer}\n\n---\n由「為你禱告」製作`;
 
       const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
