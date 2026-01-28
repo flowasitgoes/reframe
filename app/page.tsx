@@ -98,7 +98,7 @@ export default function Home() {
                   alt=""
                   width={40}
                   height={40}
-                  className="h-8 w-8 md:h-9 md:w-9 object-contain"
+                  className="h-10 w-10 object-contain"
                 />
               </div>
               <h1 className="text-2xl md:text-3xl font-serif font-medium text-foreground">
