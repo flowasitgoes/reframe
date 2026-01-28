@@ -5,7 +5,8 @@ import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
-import { AlertCircle, ArrowLeft, BookOpen, Cross, Home as HomeIcon } from "lucide-react";
+import Image from "next/image";
+import { AlertCircle, ArrowLeft, BookOpen, Home as HomeIcon } from "lucide-react";
 import type { PrayerStyle, PrayerLength } from "@/lib/prompt";
 
 interface GeneratedResult {
@@ -91,8 +92,14 @@ export default function Home() {
               <span className="hidden sm:inline truncate">ifunlove.com</span>
             </Link>
             <div className="flex items-center gap-3 shrink-0">
-              <div className="p-2 rounded-full bg-primary/10">
-                <Cross className="h-6 w-6 text-primary" />
+              <div className="p-1.5 rounded-full bg-primary/10 flex items-center justify-center">
+                <Image
+                  src="/title-icon.png"
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="h-8 w-8 md:h-9 md:w-9 object-contain"
+                />
               </div>
               <h1 className="text-2xl md:text-3xl font-serif font-medium text-foreground">
                 為你禱告
