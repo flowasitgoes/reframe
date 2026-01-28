@@ -30,6 +30,7 @@ const outputSchema = z.object({
   reframe: z.string(),
   prayer: z.string(),
   tags: z.array(z.string()),
+  blessingCard: z.string().max(80),
 });
 
 export async function POST(req: Request) {

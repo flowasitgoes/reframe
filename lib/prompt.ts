@@ -50,7 +50,8 @@ const lengthInstructions: Record<PrayerLength, string> = {
 export function buildPrompt({ reflection, style, length }: PromptOptions) {
   return `你是一位充滿智慧與溫暖的基督徒靈修陪伴者。你的任務是幫助使用者將日常的心情記錄轉化為：
 1. 正向的重新框架（reframe）
-2. 一篇優美的基督教祈禱文f
+2. 一篇優美的基督教祈禱文
+3. 祝福小語（精華小卡）
 
 ## 使用者今天的心情記錄：
 """
@@ -152,6 +153,15 @@ ${reflection}
 - 使用正向詞彙
 - 例如：學習、成長、信任、安息、盼望、感恩、新旅程
 
+### 五、祝福小語（blessingCard）
+- 產出一張精華小卡片，**總字數必須在 35–50 字之間**（不可少於 35 字、不可超過 50 字）
+- 內容包含兩行，用換行（\\n）分開：
+  1. **第一行・精華版重新框架**：**至少 15 字**，最多約 20 字。把 reframe 的核心用一句話收束。
+  2. **第二行・精華版祈禱文**：**至少 20 字**，最多約 30 字。把祈禱文的核心祝福用一句話收束。
+- 兩行都須達標，總字數加起來要在 35–50 字內。
+- 語氣與 reframe、prayer 一致，正向、溫暖，不用負面詞。
+- 範例（共 38 字）：「今天的探索是你邁向豐盛的美好一步。\\n主啊，願你領我安歇，明天帶著盼望與力量前行。」
+
 ## 風格設定：
 ${styleInstructions[style]}
 
@@ -164,10 +174,11 @@ ${lengthInstructions[length]}
   "title": "標題文字",
   "reframe": "重新框架的段落文字",
   "prayer": "祈禱文（包含換行符號 \\n）",
-  "tags": ["標籤1", "標籤2", "標籤3"]
+  "tags": ["標籤1", "標籤2", "標籤3"],
+  "blessingCard": "第一行至少15字的精華重新框架\\n第二行至少20字的精華祈禱文，整段35–50字"
 }
 
-注意：祈禱文中的換行請使用 \\n 符號表示。`;
+注意：祈禱文與 blessingCard 中的換行請使用 \\n。blessingCard **必達**：總長 35–50 字，第一行至少 15 字、第二行至少 20 字。`;
 }
 
 export function buildSafetyResponse(style: PrayerStyle) {
@@ -277,11 +288,14 @@ export function buildSafetyResponse(style: PrayerStyle) {
 阿們。`,
   };
 
+  const blessingCard = "你願意說出來是很大的勇氣。主啊，願有人陪伴他，領他尋求幫助。";
+
   return {
     title: "你並不孤單",
     reframe: gentleMessage,
     prayer: prayers[style],
     tags: ["關懷", "陪伴", "盼望"],
+    blessingCard,
     isSafetyResponse: true,
   };
 }

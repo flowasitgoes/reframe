@@ -14,6 +14,7 @@ interface GeneratedResult {
   reframe: string;
   prayer: string;
   tags?: string[];
+  blessingCard?: string;
   isSafetyResponse?: boolean;
 }
 

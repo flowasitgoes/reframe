@@ -21,6 +21,7 @@ interface PrayerResultProps {
     reframe: string;
     prayer: string;
     tags?: string[];
+    blessingCard?: string;
     isSafetyResponse?: boolean;
   };
   onRegenerate: () => void;
@@ -34,6 +35,8 @@ export function PrayerResult({
 }: PrayerResultProps) {
   const [copiedReframe, setCopiedReframe] = useState(false);
   const [copiedPrayer, setCopiedPrayer] = useState(false);
+  const [copiedBlessingCard, setCopiedBlessingCard] = useState(false);
+  const [downloadingJpg, setDownloadingJpg] = useState(false);
   // 朗讀功能暫時停用（聲音品質不佳）
   // const [isSpeaking, setIsSpeaking] = useState(false);
   // const [currentSpeaking, setCurrentSpeaking] = useState<
@@ -42,15 +45,18 @@ export function PrayerResult({
   // const speechRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const copyToClipboard = useCallback(
-    async (text: string, type: "reframe" | "prayer") => {
+    async (text: string, type: "reframe" | "prayer" | "blessingCard") => {
       try {
         await navigator.clipboard.writeText(text);
         if (type === "reframe") {
           setCopiedReframe(true);
           setTimeout(() => setCopiedReframe(false), 2000);
-        } else {
+        } else if (type === "prayer") {
           setCopiedPrayer(true);
           setTimeout(() => setCopiedPrayer(false), 2000);
+        } else {
+          setCopiedBlessingCard(true);
+          setTimeout(() => setCopiedBlessingCard(false), 2000);
         }
       } catch (err) {
         console.error("Failed to copy:", err);
@@ -62,10 +68,15 @@ export function PrayerResult({
   const downloadAs = useCallback(
     (format: "txt" | "md") => {
       const title = result.title || "我的禱告";
+      const blessing = result.blessingCard
+        ? (format === "md"
+            ? `## 祝福小語\n\n${result.blessingCard}\n\n`
+            : `【祝福小語】\n${result.blessingCard}\n\n`)
+        : "";
       const content =
         format === "md"
-          ? `# ${title}\n\n## 選擇讓你感覺好的思維\n\n${result.reframe}\n\n## 禱告\n\n${result.prayer}\n\n---\n\n*由 為你禱告 製作*`
-          : `${title}\n${"=".repeat(title.length * 2)}\n\n【選擇讓你感覺好的思維】\n${result.reframe}\n\n【禱告】\n${result.prayer}\n\n---\n由「為你禱告」製作`;
+          ? `# ${title}\n\n${blessing}## 選擇讓你感覺好的思維\n\n${result.reframe}\n\n## 禱告\n\n${result.prayer}\n\n---\n\n*由 為你禱告 製作*`
+          : `${title}\n${"=".repeat(Math.min(title.length * 2, 40))}\n\n${blessing}【選擇讓你感覺好的思維】\n${result.reframe}\n\n【禱告】\n${result.prayer}\n\n---\n由「為你禱告」製作`;
 
       const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
@@ -79,6 +90,70 @@ export function PrayerResult({
     },
     [result]
   );
+
+  const downloadBlessingCardJpg = useCallback(async () => {
+    const text = result.blessingCard;
+    if (!text || typeof window === "undefined") return;
+    setDownloadingJpg(true);
+    try {
+      const img = new Image();
+      const imgLoad = new Promise<HTMLImageElement>((resolve, reject) => {
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("無法載入背景圖"));
+        img.crossOrigin = "anonymous";
+        img.src = "/prayers-card.jpg";
+      });
+      const loadedImg = await imgLoad;
+      const canvas = document.createElement("canvas");
+      canvas.width = loadedImg.naturalWidth;
+      canvas.height = loadedImg.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("無法建立畫布");
+      ctx.drawImage(loadedImg, 0, 0);
+      const fontSize = 20;
+      const lineHeight = Math.round(fontSize * 1.4);
+      ctx.font = `${fontSize}px "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif`;
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      // 文字區塊底邊距離畫布底部 90px，由下往上排
+      const startY = canvas.height - 90 - lineHeight / 2 - (lines.length - 1) * lineHeight;
+      const totalHeight = lines.length * lineHeight;
+      const padV = 20;
+      const boxTop = startY - lineHeight / 2 - padV;
+      const boxHeight = totalHeight + padV * 2;
+      // 先畫 overlay（在下層），再畫文字（在最上層）；overlay 寬度全滿
+      ctx.fillStyle = "rgba(56, 56, 56, 0.5)";
+      ctx.fillRect(0, boxTop, canvas.width, boxHeight);
+      ctx.fillStyle = "#ffffff";
+      lines.forEach((line, i) => {
+        ctx.fillText(line.trim(), canvas.width / 2, startY + i * lineHeight);
+      });
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            setDownloadingJpg(false);
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `祝福卡片-${Date.now()}.jpg`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setDownloadingJpg(false);
+        },
+        "image/jpeg",
+        0.92
+      );
+    } catch (err) {
+      console.error("下載祝福卡片失敗:", err);
+      setDownloadingJpg(false);
+    }
+  }, [result.blessingCard]);
 
   // 朗讀功能暫時停用（聲音品質不佳）
   // const speak = useCallback(
@@ -256,6 +331,38 @@ export function PrayerResult({
         </CardContent>
       </Card>
 
+      {result.blessingCard && (
+        <Card className="border-[#999] bg-[#cccccc9e] text-center">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-center relative">
+              <CardTitle className="text-base font-medium text-foreground">
+                祝福小語
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() =>
+                  copyToClipboard(result.blessingCard!, "blessingCard")
+                }
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                title="複製"
+              >
+                {copiedBlessingCard ? (
+                  <Check className="h-4 w-4 text-primary" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">
+              {result.blessingCard}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="flex flex-wrap gap-3 justify-center pt-4">
         <Button
           variant="outline"
@@ -276,6 +383,20 @@ export function PrayerResult({
           <Download className="mr-2 h-4 w-4" />
           下載 TXT
         </Button>
+        {result.blessingCard && (
+          <Button
+            variant="outline"
+            onClick={downloadBlessingCardJpg}
+            disabled={downloadingJpg}
+            className="min-w-[140px]"
+          >
+            <Download
+              className={`mr-2 h-4 w-4 ${downloadingJpg ? "animate-pulse" : ""}`}
+            />
+            {downloadingJpg ? "生成中…" : "下載祝福卡片 JPG"}
+          </Button>
+        )}
+        {/* 下載 MD 暫時停用
         <Button
           variant="outline"
           onClick={() => downloadAs("md")}
@@ -284,6 +405,7 @@ export function PrayerResult({
           <Download className="mr-2 h-4 w-4" />
           下載 MD
         </Button>
+        */}
       </div>
     </div>
   );
