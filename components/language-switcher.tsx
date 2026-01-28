@@ -18,7 +18,7 @@ export function LanguageSwitcher() {
       type="button"
       variant="ghost"
       size="sm"
-      className="text-muted-foreground hover:text-foreground font-medium min-w-[3rem]"
+      className="cursor-pointer text-muted-foreground hover:text-foreground font-medium min-w-[3rem]"
       onClick={() => setLocale(next)}
       aria-label={t(`locale.${next}`)}
     >
