@@ -7,10 +7,12 @@ import "./globals.css";
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ifunlove.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pray.ifunlove.com";
 const siteName = "為你禱告";
 const siteDescription =
   "寫下你的日常心情與反思，獲得正向的重新框架與專屬的基督教禱告。在每一刻找到平安、感恩與盼望。由 iFunLove 提供。";
+
+const ogImageUrl = `${siteUrl.replace(/\/$/, "")}/og.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -42,10 +44,11 @@ export const metadata: Metadata = {
     description: siteDescription,
     images: [
       {
-        url: "/og.png",
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: "為你禱告 - 將心情化為祝福",
+        type: "image/png",
       },
     ],
   },
@@ -53,13 +56,16 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "為你禱告 - 將心情化為祝福",
     description: siteDescription,
-    images: ["/og.png"],
+    images: [ogImageUrl],
   },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  ...(process.env.NEXT_PUBLIC_FB_APP_ID && {
+    other: { "fb:app_id": process.env.NEXT_PUBLIC_FB_APP_ID },
+  }),
   icons: {
     icon: [
       { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },

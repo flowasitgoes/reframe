@@ -14,9 +14,10 @@
 
 | 變數 | 說明 | 範例 |
 |------|------|------|
-| `NEXT_PUBLIC_SITE_URL` | 網站的完整網址（用於 OG、Twitter 的絕對圖址與 canonical） | `https://prayer.ifunlove.com` 或 `https://ifunlove.com/reframe` |
+| `NEXT_PUBLIC_SITE_URL` | 網站的完整網址（用於 OG、Twitter 的**絕對圖址**與 canonical，**必影響 Facebook/Threads 縮圖**） | `https://pray.ifunlove.com` |
+| `NEXT_PUBLIC_FB_APP_ID` | 選填。Facebook App ID，設了可消除 Meta 偵錯工具的「缺少 fb:app_id」警告，並有助分享統計 | 從 [Meta for Developers](https://developers.facebook.com/apps/) 建立應用後取得 |
 
-未設定時會使用 `https://ifunlove.com`。部署到 Vercel 後，在 **Settings → Environment Variables** 新增即可。
+未設定 `NEXT_PUBLIC_SITE_URL` 時會使用 `https://pray.ifunlove.com`。部署到 Vercel 後，在 **Settings → Environment Variables** 新增即可。**縮圖抓不到時，請確認此網址與實際對外網址一致**（例如經 Cloudflare 指到 pray.ifunlove.com 時，就填 `https://pray.ifunlove.com`）。
 
 ---
 
@@ -43,7 +44,8 @@
 - **描述**：`description`、`openGraph.description`、`twitter.description`（同一段文案）
 - **關鍵字**：`keywords` 含「禱告、基督教禱告、心情記錄、靈修、正向思考、重新框架、iFunLove、為你禱告」
 - **語系**：`html lang="zh-TW"`、`openGraph.locale: "zh_TW"`
-- **縮圖**：`og:image`、`twitter:image` 皆指向 `/og.png`（1200×630）
+- **縮圖**：`og:image`、`twitter:image` 皆用**絕對網址** `{NEXT_PUBLIC_SITE_URL}/og.png`（1200×630），以便 Facebook / Threads 正確抓圖
+- **Meta**：若有設 `NEXT_PUBLIC_FB_APP_ID`，會輸出 `<meta property="fb:app_id" content="...">`
 - **圖示**：`icons`（含 light/dark）、`apple-touch-icon`、`manifest.json` 裡的 icon
 - **PWA**：`public/manifest.json`（名稱、說明、theme_color、icons）
 - **檢索**：`robots: { index: true, follow: true }`
