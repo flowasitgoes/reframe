@@ -39,13 +39,16 @@ export async function POST(req: Request) {
     const forwardedFor = headersList.get("x-forwarded-for");
     const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
 
-    // Get OpenRouter API key from header
-    const openRouterKey = headersList.get("x-openrouter-key");
+    // 優先使用伺服器環境變數（Vercel 上設定 OPENROUTER_API_KEY），沒有時才用前端傳的 key
+    const openRouterKey =
+      process.env.OPENROUTER_API_KEY ||
+      headersList.get("x-openrouter-key") ||
+      "";
     if (!openRouterKey) {
       return Response.json(
         {
           error:
-            "Please set your OpenRouter API key in the settings (gear icon in the header).",
+            "服務尚未設定 API Key。若為本機開發，請在 .env.local 設定 OPENROUTER_API_KEY。",
         },
         { status: 401 }
       );
@@ -122,7 +125,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create OpenRouter provider with user's API key
     const openrouter = createOpenRouter({
       apiKey: openRouterKey,
     });
@@ -170,8 +172,7 @@ export async function POST(req: Request) {
       ) {
         return Response.json(
           {
-            error:
-              "Invalid API key. Please check your OpenRouter API key in settings.",
+            error: "API Key 無效或已過期，請聯絡管理員。",
           },
           { status: 401 }
         );

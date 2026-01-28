@@ -5,7 +5,6 @@ import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, BookOpen, Cross } from "lucide-react";
-import { ApiKeyModal, getStoredApiKey } from "@/components/api-key-modal";
 import type { PrayerStyle, PrayerLength } from "@/lib/prompt";
 
 interface GeneratedResult {
@@ -35,13 +34,9 @@ export default function Home() {
     setError(null);
 
     try {
-      const apiKey = getStoredApiKey();
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(apiKey && { "X-OpenRouter-Key": apiKey }),
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -90,7 +85,7 @@ export default function Home() {
                 為你禱告
               </h1>
             </div>
-            <ApiKeyModal />
+            <div className="w-10" />
           </div>
         </div>
       </header>
