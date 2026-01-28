@@ -151,10 +151,12 @@ export default function Home() {
         {/* Footer */}
         <footer className="max-w-2xl mx-auto mt-16 pt-8 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            「為你禱告」使用 AI
-            根據你的心情記錄生成禱告。這不能取代專業的心理諮詢或牧者關懷。
+            「為你禱告」觀注您的心情記錄以正向的心態換成禱告，尚未能取代專業的心理諮詢、牧者或朋友的關懷。
           </p>
           <p className="text-sm text-muted-foreground mt-4">
+            請持續多多和朋友家人相聚，談心，到戶外走走，做一些讓自己開心的事。
+          </p>
+          {/* <p className="text-sm text-muted-foreground mt-4">
             如果你正在經歷危機，請撥打{" "}
             <a
               href="tel:1925"
@@ -170,7 +172,7 @@ export default function Home() {
               安心專線 1980
             </a>
             。
-          </p>
+          </p> */}
         </footer>
       </main>
     </div>

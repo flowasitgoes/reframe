@@ -63,8 +63,8 @@ export function PrayerResult({
       const title = result.title || "我的禱告";
       const content =
         format === "md"
-          ? `# ${title}\n\n## 換個角度看\n\n${result.reframe}\n\n## 禱告\n\n${result.prayer}\n\n---\n\n*由 為你禱告 生成*`
-          : `${title}\n${"=".repeat(title.length * 2)}\n\n【換個角度看】\n${result.reframe}\n\n【禱告】\n${result.prayer}\n\n---\n由「為你禱告」生成`;
+          ? `# ${title}\n\n## 選擇讓你感覺好的思維\n\n${result.reframe}\n\n## 禱告\n\n${result.prayer}\n\n---\n\n*由 為你禱告 生成*`
+          : `${title}\n${"=".repeat(title.length * 2)}\n\n【選擇讓你感覺好的思維】\n${result.reframe}\n\n【禱告】\n${result.prayer}\n\n---\n由「為你禱告」生成`;
 
       const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
@@ -181,7 +181,7 @@ export function PrayerResult({
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium text-foreground">
-              換個角度看
+              選擇讓你感覺好的思維
             </CardTitle>
             <div className="flex gap-2">
               <Button
@@ -228,7 +228,7 @@ export function PrayerResult({
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium text-foreground">
-              禱告
+              垂聽我禱告的神
             </CardTitle>
             <div className="flex gap-2">
               <Button
