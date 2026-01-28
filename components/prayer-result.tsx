@@ -37,6 +37,7 @@ export function PrayerResult({
   const [copiedPrayer, setCopiedPrayer] = useState(false);
   const [copiedBlessingCard, setCopiedBlessingCard] = useState(false);
   const [downloadingJpg, setDownloadingJpg] = useState(false);
+  const [downloadingWhiteJpg, setDownloadingWhiteJpg] = useState(false);
   // 朗讀功能暫時停用（聲音品質不佳）
   // const [isSpeaking, setIsSpeaking] = useState(false);
   // const [currentSpeaking, setCurrentSpeaking] = useState<
@@ -157,6 +158,67 @@ export function PrayerResult({
     } catch (err) {
       console.error("下載祝福卡片失敗:", err);
       setDownloadingJpg(false);
+    }
+  }, [result.blessingCard, t]);
+
+  const downloadBlessingCardWhiteJpg = useCallback(async () => {
+    const text = result.blessingCard;
+    if (!text || typeof window === "undefined") return;
+    setDownloadingWhiteJpg(true);
+    try {
+      const img = new Image();
+      const imgLoad = new Promise<HTMLImageElement>((resolve, reject) => {
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("無法載入背景圖"));
+        img.crossOrigin = "anonymous";
+        img.src = "/prayer-card-white-bg.jpg";
+      });
+      const loadedImg = await imgLoad;
+      const canvas = document.createElement("canvas");
+      canvas.width = loadedImg.naturalWidth;
+      canvas.height = loadedImg.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("無法建立畫布");
+      ctx.drawImage(loadedImg, 0, 0);
+      const fontSize = 28;
+      const lineHeight = Math.round(fontSize * 1.4);
+      ctx.font = `${fontSize}px "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif`;
+      ctx.fillStyle = "#555";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      // 圖片中央為淺色卡片區（約 15%～85% 寬、25%～75% 高），文字置中寫在該區
+      const boxLeft = canvas.width * 0.15;
+      const boxWidth = canvas.width * 0.7;
+      const boxTop = canvas.height * 0.25;
+      const boxHeight = canvas.height * 0.5;
+      const totalHeight = lines.length * lineHeight;
+      const startY = boxTop + boxHeight / 2 - totalHeight / 2 + lineHeight / 2;
+      lines.forEach((line, i) => {
+        ctx.fillText(line.trim(), boxLeft + boxWidth / 2, startY + i * lineHeight);
+      });
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            setDownloadingWhiteJpg(false);
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${t("result.downloadFilenameBlessingWhite")}-${Date.now()}.jpg`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setDownloadingWhiteJpg(false);
+        },
+        "image/jpeg",
+        0.92
+      );
+    } catch (err) {
+      console.error("下載祈願卡片(白)失敗:", err);
+      setDownloadingWhiteJpg(false);
     }
   }, [result.blessingCard, t]);
 
@@ -373,7 +435,7 @@ export function PrayerResult({
           variant="outline"
           onClick={onRegenerate}
           disabled={isLoading}
-          className="min-w-[140px] bg-transparent"
+          className="min-w-[140px] bg-transparent cursor-pointer"
         >
           <RefreshCw
             className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
@@ -383,23 +445,36 @@ export function PrayerResult({
         <Button
           variant="outline"
           onClick={() => downloadAs("txt")}
-          className="min-w-[140px]"
+          className="min-w-[140px] cursor-pointer"
         >
           <Download className="mr-2 h-4 w-4" />
           {t("result.downloadTxt")}
         </Button>
         {result.blessingCard && (
-          <Button
-            variant="outline"
-            onClick={downloadBlessingCardJpg}
-            disabled={downloadingJpg}
-            className="min-w-[140px]"
-          >
-            <Download
-              className={`mr-2 h-4 w-4 ${downloadingJpg ? "animate-pulse" : ""}`}
-            />
-            {downloadingJpg ? t("result.downloadingJpg") : t("result.downloadBlessingJpg")}
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              onClick={downloadBlessingCardJpg}
+              disabled={downloadingJpg}
+              className="min-w-[140px] cursor-pointer"
+            >
+              <Download
+                className={`mr-2 h-4 w-4 ${downloadingJpg ? "animate-pulse" : ""}`}
+              />
+              {downloadingJpg ? t("result.downloadingJpg") : t("result.downloadBlessingJpg")}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={downloadBlessingCardWhiteJpg}
+              disabled={downloadingWhiteJpg}
+              className="min-w-[140px] cursor-pointer"
+            >
+              <Download
+                className={`mr-2 h-4 w-4 ${downloadingWhiteJpg ? "animate-pulse" : ""}`}
+              />
+              {downloadingWhiteJpg ? t("result.downloadingWhiteJpg") : t("result.downloadBlessingWhiteJpg")}
+            </Button>
+          </>
         )}
         {/* 下載 MD 暫時停用
         <Button
