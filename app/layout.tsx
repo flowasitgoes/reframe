@@ -7,28 +7,69 @@ import "./globals.css";
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ifunlove.com";
+const siteName = "為你禱告";
+const siteDescription =
+  "寫下你的日常心情與反思，獲得正向的重新框架與專屬的基督教禱告。在每一刻找到平安、感恩與盼望。由 iFunLove 提供。";
+
 export const metadata: Metadata = {
-  title: "為你禱告 - 將心情化為祝福",
-  description:
-    "寫下你的日常心情與反思，獲得正向的重新框架與專屬的基督教禱告。在每一刻找到平安、感恩與盼望。",
-  generator: "v0.app",
-  icons: {
-    icon: [
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "為你禱告 - 將心情化為祝福",
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  keywords: [
+    "禱告",
+    "基督教禱告",
+    "心情記錄",
+    "靈修",
+    "正向思考",
+    "重新框架",
+    "iFunLove",
+    "為你禱告",
+  ],
+  authors: [{ name: "iFunLove", url: "https://ifunlove.com" }],
+  creator: "iFunLove",
+  publisher: "iFunLove",
+  formatDetection: { email: false, address: false, telephone: false },
+  openGraph: {
+    type: "website",
+    locale: "zh_TW",
+    url: siteUrl,
+    siteName,
+    title: "為你禱告 - 將心情化為祝福",
+    description: siteDescription,
+    images: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "為你禱告 - 將心情化為祝福",
       },
     ],
-    apple: "/apple-icon.png",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "為你禱告 - 將心情化為祝福",
+    description: siteDescription,
+    images: ["/og.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  icons: {
+    icon: [
+      { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/icon-192x192.png",
+  },
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
