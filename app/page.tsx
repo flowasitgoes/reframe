@@ -8,8 +8,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import Image from "next/image";
 import { AlertCircle, ArrowLeft, BookOpen, Home as HomeIcon } from "lucide-react";
-import { useTranslations } from "@/context/locale";
+import { useLocale, useTranslations } from "@/context/locale";
 import type { PrayerStyle, PrayerLength } from "@/lib/prompt";
+import { submitEntry } from "@/lib/entry-api";
+import { useToast } from "@/hooks/use-toast";
 
 interface GeneratedResult {
   title?: string | null;
@@ -27,8 +29,11 @@ interface FormData {
 }
 
 export default function Home() {
+  const { locale } = useLocale();
   const t = useTranslations();
+  const { toast } = useToast();
   const [result, setResult] = useState<GeneratedResult | null>(null);
+  const [entryId, setEntryId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const lastFormData = useRef<FormData | null>(null);
@@ -43,7 +48,7 @@ export default function Home() {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, locale }),
       });
 
       const json = await response.json();
@@ -53,6 +58,24 @@ export default function Home() {
       }
 
       setResult(json);
+      setEntryId(null);
+
+      try {
+        const { entry_id } = await submitEntry({
+          journal: data.reflection,
+          reframe: json.reframe,
+          prayer: json.prayer,
+          blessing: json.blessingCard ?? "",
+        });
+        setEntryId(entry_id);
+      } catch (saveErr) {
+        toast({
+          title: "Save failed",
+          description:
+            saveErr instanceof Error ? saveErr.message : "Failed to save entry.",
+          variant: "destructive",
+        });
+      }
 
       // Scroll to result after a brief delay
       setTimeout(() => {
@@ -68,7 +91,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [t]);
+  }, [t, locale, toast]);
 
   const handleRegenerate = useCallback(() => {
     if (lastFormData.current) {
@@ -110,7 +133,7 @@ export default function Home() {
               </h1>
             </div>
             <div className="flex flex-1 min-w-0 items-center justify-end gap-1" aria-hidden>
-              <LanguageSwitcher />
+              <LanguageSwitcher disabled={!!result} />
             </div>
           </div>
         </div>
@@ -154,6 +177,7 @@ export default function Home() {
             <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-sm">
               <PrayerResult
                 result={result}
+                entryId={entryId}
                 onRegenerate={handleRegenerate}
                 isLoading={isLoading}
               />

@@ -1,7 +1,7 @@
 "use client";
 
-import { useLocale } from "@/context/locale";
 import type { Locale } from "@/context/locale";
+import { useLocale } from "@/context/locale";
 import { Button } from "@/components/ui/button";
 
 const labels: Record<Locale, string> = {
@@ -9,7 +9,10 @@ const labels: Record<Locale, string> = {
   en: "EN",
 };
 
-export function LanguageSwitcher() {
+type Props = { disabled?: boolean };
+
+export function LanguageSwitcher(props: Props) {
+  const { disabled = false } = props;
   const { locale, setLocale, t } = useLocale();
   const next: Locale = locale === "zh" ? "en" : "zh";
 
@@ -18,7 +21,8 @@ export function LanguageSwitcher() {
       type="button"
       variant="ghost"
       size="sm"
-      className="cursor-pointer text-muted-foreground hover:text-foreground font-medium min-w-[3rem]"
+      disabled={disabled}
+      className="min-w-[3rem] font-medium text-muted-foreground transition-opacity disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none cursor-pointer hover:text-foreground"
       onClick={() => setLocale(next)}
       aria-label={t(`locale.${next}`)}
     >

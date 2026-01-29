@@ -13,6 +13,7 @@ import {
   Heart,
 } from "lucide-react";
 import { useTranslations } from "@/context/locale";
+import { trackEvent } from "@/lib/entry-api";
 
 interface PrayerResultProps {
   result: {
@@ -23,12 +24,14 @@ interface PrayerResultProps {
     blessingCard?: string;
     isSafetyResponse?: boolean;
   };
+  entryId?: string | null;
   onRegenerate: () => void;
   isLoading: boolean;
 }
 
 export function PrayerResult({
   result,
+  entryId,
   onRegenerate,
   isLoading,
 }: PrayerResultProps) {
@@ -221,6 +224,24 @@ export function PrayerResult({
       setDownloadingWhiteJpg(false);
     }
   }, [result.blessingCard, t]);
+
+  const handleDownloadBlessingJpg = useCallback(() => {
+    trackEvent({
+      event_name: "click_download_blessing",
+      entry_id: entryId ?? undefined,
+      meta: { format: "jpg" },
+    });
+    downloadBlessingCardJpg();
+  }, [entryId, downloadBlessingCardJpg]);
+
+  const handleDownloadBlessingWhiteJpg = useCallback(() => {
+    trackEvent({
+      event_name: "click_download_blessing",
+      entry_id: entryId ?? undefined,
+      meta: { format: "jpg_white" },
+    });
+    downloadBlessingCardWhiteJpg();
+  }, [entryId, downloadBlessingCardWhiteJpg]);
 
   // 朗讀功能暫時停用（聲音品質不佳）
   // const speak = useCallback(
@@ -454,7 +475,7 @@ export function PrayerResult({
           <>
             <Button
               variant="outline"
-              onClick={downloadBlessingCardJpg}
+              onClick={handleDownloadBlessingJpg}
               disabled={downloadingJpg}
               className="min-w-[140px] cursor-pointer"
             >
@@ -465,7 +486,7 @@ export function PrayerResult({
             </Button>
             <Button
               variant="outline"
-              onClick={downloadBlessingCardWhiteJpg}
+              onClick={handleDownloadBlessingWhiteJpg}
               disabled={downloadingWhiteJpg}
               className="min-w-[140px] cursor-pointer"
             >

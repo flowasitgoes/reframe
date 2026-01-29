@@ -9,6 +9,10 @@ import {
   type PrayerStyle,
   type PrayerLength,
 } from "@/lib/prompt";
+import {
+  buildPrompt as buildPromptEn,
+  buildSafetyResponse as buildSafetyResponseEn,
+} from "@/lib/prompt_en";
 import { rateLimit } from "@/lib/rate-limit";
 import {
   checkTokenLimit,
@@ -23,6 +27,7 @@ const requestSchema = z.object({
     .max(4000, "Please keep your reflection under 4000 characters"),
   style: z.enum(["gentle", "victorious", "gratitude", "night", "morning"]),
   length: z.enum(["short", "medium", "long"]),
+  locale: z.enum(["zh", "en"]).optional().default("zh"),
 });
 
 const outputSchema = z.object({
@@ -84,11 +89,14 @@ export async function POST(req: Request) {
       return Response.json({ error: errorMessage }, { status: 400 });
     }
 
-    const { reflection, style, length } = parseResult.data;
+    const { reflection, style, length, locale } = parseResult.data;
+    const isEn = locale === "en";
 
     // Check for safety keywords
     if (checkForSafetyKeywords(reflection)) {
-      const safetyResponse = buildSafetyResponse(style as PrayerStyle);
+      const safetyResponse = isEn
+        ? buildSafetyResponseEn(style as PrayerStyle)
+        : buildSafetyResponse(style as PrayerStyle);
       return Response.json(safetyResponse, {
         headers: {
           "X-RateLimit-Remaining": String(rateLimitResult.remaining),
@@ -96,12 +104,18 @@ export async function POST(req: Request) {
       });
     }
 
-    // Build prompt and call LLM
-    const prompt = buildPrompt({
-      reflection,
-      style: style as PrayerStyle,
-      length: length as PrayerLength,
-    });
+    // Build prompt and call LLM (use English prompt when locale is en)
+    const prompt = isEn
+      ? buildPromptEn({
+          reflection,
+          style: style as PrayerStyle,
+          length: length as PrayerLength,
+        })
+      : buildPrompt({
+          reflection,
+          style: style as PrayerStyle,
+          length: length as PrayerLength,
+        });
 
     // 估算token数量并检查限制
     const inputTokens = estimatePromptTokens(prompt);
