@@ -18,7 +18,7 @@ const styleInstructions: Record<PrayerStyle, string> = {
 - 強調上帝溫柔的同在與接納
 - 讓使用者感受到被理解、被擁抱
 - 適合情緒低落、需要安慰的時刻`,
-  victorious: `風格：得勝宣告
+  victorious: `風格：鼓舞打氣
 - 使用有力量、充滿信心的語言
 - 強調靠著信仰戰勝困難
 - 宣告上帝的能力與應許

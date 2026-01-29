@@ -3,8 +3,8 @@
     "siteName": "為你禱告",
     "backToHome": "回到 ifunlove.com 主頁",
     "heroTitle": "將你的心情化為祝福",
-    "heroSubtitle": "寫下今天的心情與想法，讓我們為你重新框架觀點，並創作一篇專屬於你的禱告。",
-    "sectionReflection": "今日心情記錄",
+    "heroSubtitle": "寫下今天的心情與想法，讓我們選擇不一樣的視野，創作一篇專屬於你的禱告。",
+    "sectionReflection": "手札日常筆記",
     "footer1": "「為你禱告」傾聽您的心情記錄並以正向心態轉換為禱告，",
     "footer2": "多多和朋友家人相聚、談心、玩樂，到戶外走走，",
     "footer3": "做一些讓自己開心的事。",
@@ -13,7 +13,7 @@
   },
   "form": {
     "reflectionLabel": "寫下你的心情",
-    "reflectionHint": "分享今天發生的事、你的感受、擔憂或感恩的事。這些文字將被轉化為祝福與禱告。",
+    "reflectionHint": "寫下最近發生的事、你的感受、你正在經歷的, 感恩的, 還在思考的事。這些文字將被轉化為祝福與禱告。",
     "reflectionPlaceholder": "今天我感到... / 我正在經歷... / 我心裡有些...",
     "charCount": "{count} / 4000 字",
     "charMinHint": "（至少 20 個字）",
@@ -21,10 +21,10 @@
     "lengthLabel": "禱告長度",
     "styles": {
       "gentle": { "label": "溫柔安慰", "description": "柔和撫慰的話語" },
-      "victorious": { "label": "得勝宣告", "description": "充滿力量與信心" },
+      "victorious": { "label": "鼓舞打氣", "description": "充滿力量與信心" },
       "gratitude": { "label": "感恩讚美", "description": "專注恩典與祝福" },
       "morning": { "label": "晨間盼望", "description": "迎接新的一天" },
-      "night": { "label": "夜間安息", "description": "釋放重擔、安歇" }
+      "night": { "label": "夜間安息", "description": "靜靜釋放與休憩" }
     },
     "lengths": {
       "short": "簡短",
