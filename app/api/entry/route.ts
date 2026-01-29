@@ -61,6 +61,8 @@ export async function POST(req: Request) {
       );
     }
 
+    await supabase.rpc("increment_count_people");
+
     const headers: HeadersInit = {
       "Content-Type": "application/json",
     };
