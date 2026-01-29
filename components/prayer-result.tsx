@@ -330,7 +330,7 @@ export function PrayerResult({
       )}
 
       <Card className="border-border bg-card">
-        <CardHeader className="pb-3">
+        <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium text-foreground">
               {t("result.reframeTitle")}
@@ -375,7 +375,7 @@ export function PrayerResult({
       </Card>
 
       <Card className="border-primary/20 bg-primary/5">
-        <CardHeader className="pb-3">
+        <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium text-foreground">
               {t("result.prayerTitle")}
@@ -421,7 +421,7 @@ export function PrayerResult({
 
       {result.blessingCard && (
         <Card className="border-[#999] bg-[#cccccc9e] text-center">
-          <CardHeader className="pb-2">
+          <CardHeader>
             <div className="flex items-center justify-center relative">
               <CardTitle className="text-base font-medium text-foreground">
                 {t("result.blessingTitle")}
