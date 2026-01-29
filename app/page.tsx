@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -38,14 +38,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const lastFormData = useRef<FormData | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
-  const [countPeople, setCountPeople] = useState<number | null>(null);
-
-  useEffect(() => {
-    fetch("/api/stats")
-      .then((res) => res.json())
-      .then((data) => setCountPeople(data.count_people ?? 0))
-      .catch(() => setCountPeople(0));
-  }, []);
 
   const generatePrayer = useCallback(async (data: FormData) => {
     lastFormData.current = data;
@@ -76,7 +68,6 @@ export default function Home() {
           blessing: json.blessingCard ?? "",
         });
         setEntryId(entry_id);
-        setCountPeople((prev) => (prev != null ? prev + 1 : null));
       } catch (saveErr) {
         toast({
           title: "Save failed",
@@ -191,14 +182,6 @@ export default function Home() {
                 isLoading={isLoading}
               />
             </div>
-          </section>
-        )}
-
-        {countPeople != null && (
-          <section className="max-w-2xl mx-auto mt-16 text-center">
-            <p className="text-base text-muted-foreground">
-              {t("home.prayedWithCount", { count: String(countPeople) })}
-            </p>
           </section>
         )}
 
