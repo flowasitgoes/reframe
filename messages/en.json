@@ -7,7 +7,9 @@
     "sectionReflection": "Today’s reflection",
     "footer1": "“Pray for You” turns your reflections into encouragement and prayer.",
     "footer2": "Spend time with family and friends, talk, have fun, get outside,",
-    "footer3": "and do things that bring you joy."
+    "footer3": "and do things that bring you joy.",
+    "prayerCountBefore": "We've sincerely prayed for ",
+    "prayerCountAfter": " people."
   },
   "form": {
     "reflectionLabel": "Write your thoughts",

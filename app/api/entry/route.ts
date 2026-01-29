@@ -30,9 +30,25 @@ export async function POST(req: Request) {
     const { journal, reframe, prayer, blessing } = parsed.data;
     const { sessionId, cookieHeader } = getOrCreateSessionId(req);
 
+    const { data: personNumber, error: countError } = await supabase.rpc(
+      "increment_prayer_count"
+    );
+    if (countError) {
+      console.error("increment_prayer_count error:", countError);
+      return NextResponse.json(
+        { error: "Failed to update count." },
+        { status: 500 }
+      );
+    }
+    const ordinal = personNumber != null ? Number(personNumber) : null;
+
     const { data: entry, error: entryError } = await supabase
       .from("entries")
-      .insert({ session_id: sessionId, journal })
+      .insert({
+        session_id: sessionId,
+        journal,
+        person_number: ordinal,
+      })
       .select("id")
       .single();
 
@@ -51,6 +67,7 @@ export async function POST(req: Request) {
       reframe,
       prayer,
       blessing,
+      person_number: ordinal,
     });
 
     if (genError) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -34,10 +34,25 @@ export default function Home() {
   const { toast } = useToast();
   const [result, setResult] = useState<GeneratedResult | null>(null);
   const [entryId, setEntryId] = useState<string | null>(null);
+  const [prayerCount, setPrayerCount] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const lastFormData = useRef<FormData | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+
+  const fetchPrayerCount = useCallback(async () => {
+    try {
+      const res = await fetch("/api/stats");
+      const data = await res.json();
+      if (typeof data?.count === "number") setPrayerCount(data.count);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPrayerCount();
+  }, [fetchPrayerCount]);
 
   const generatePrayer = useCallback(async (data: FormData) => {
     lastFormData.current = data;
@@ -68,6 +83,7 @@ export default function Home() {
           blessing: json.blessingCard ?? "",
         });
         setEntryId(entry_id);
+        fetchPrayerCount();
       } catch (saveErr) {
         toast({
           title: "Save failed",
@@ -91,7 +107,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [t, locale, toast]);
+  }, [t, locale, toast, fetchPrayerCount]);
 
   const handleRegenerate = useCallback(() => {
     if (lastFormData.current) {
@@ -182,6 +198,20 @@ export default function Home() {
                 isLoading={isLoading}
               />
             </div>
+          </section>
+        )}
+
+        {/* Prayer count */}
+        {prayerCount !== null && (
+          <section
+            className="max-w-2xl mx-auto mt-16 text-center"
+            style={{ paddingTop: 0, borderTop: 0 }}
+          >
+            <p className="text-sm text-muted-foreground">
+              {t("home.prayerCountBefore")}
+              <strong>{prayerCount}</strong>
+              {t("home.prayerCountAfter")}
+            </p>
           </section>
         )}
 

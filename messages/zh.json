@@ -7,7 +7,9 @@
     "sectionReflection": "今日心情記錄",
     "footer1": "「為你禱告」傾聽您的心情記錄並以正向心態轉換為禱告，",
     "footer2": "多多和朋友家人相聚、談心、玩樂，到戶外走走，",
-    "footer3": "做一些讓自己開心的事。"
+    "footer3": "做一些讓自己開心的事。",
+    "prayerCountBefore": "我們已誠摯得為 ",
+    "prayerCountAfter": " 人凝聚，禱告。"
   },
   "form": {
     "reflectionLabel": "寫下你的心情",

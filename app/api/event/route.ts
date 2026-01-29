@@ -28,15 +28,33 @@ export async function POST(req: Request) {
     const { event_name, entry_id, meta } = parsed.data;
     const { sessionId, cookieHeader } = getOrCreateSessionId(req);
 
-    const { error } = await supabase.from("events").insert({
+    let personNumber: number | null = null;
+    if (entry_id) {
+      const { data: row } = await supabase
+        .from("entries")
+        .select("person_number")
+        .eq("id", entry_id)
+        .single();
+      if (row?.person_number != null) personNumber = Number(row.person_number);
+    }
+
+    const payload: Record<string, unknown> = {
       session_id: sessionId,
       entry_id: entry_id ?? null,
       event_name,
       meta: meta ?? null,
-    });
+    };
+    if (personNumber != null) payload.person_number = personNumber;
 
-    if (error) {
-      console.error("Event insert error:", error);
+    let result = await supabase.from("events").insert(payload);
+
+    if (result.error?.code === "PGRST204" && payload.person_number !== undefined) {
+      delete payload.person_number;
+      result = await supabase.from("events").insert(payload);
+    }
+
+    if (result.error) {
+      console.error("Event insert error:", result.error);
       return NextResponse.json(
         { error: "Failed to record event." },
         { status: 500 }
