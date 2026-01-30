@@ -11,10 +11,12 @@ import React, {
 } from "react";
 import zh from "@/messages/zh.json";
 import en from "@/messages/en.json";
+import type { ReligionBranch } from "@/lib/prompt-types";
 
 export type Locale = "zh" | "en";
 
 const STORAGE_KEY = "prayforyou_locale";
+const RELIGION_STORAGE_KEY = "prayforyou_religion";
 const FADE_DURATION_MS = 220;
 
 const messages: Record<Locale, Record<string, unknown>> = {
@@ -39,6 +41,8 @@ function interpolate(str: string, params: Record<string, string | number>): stri
 interface LocaleContextValue {
   locale: Locale;
   setLocale: (next: Locale) => void;
+  religion: ReligionBranch;
+  setReligion: (next: ReligionBranch) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
 }
 
@@ -46,6 +50,7 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("zh");
+  const [religion, setReligionState] = useState<ReligionBranch>("christian");
   const [mounted, setMounted] = useState(false);
   const [contentOpacity, setContentOpacity] = useState(1);
   const transitionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -54,6 +59,9 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as Locale | null;
       if (stored === "zh" || stored === "en") setLocaleState(stored);
+      const storedReligion = localStorage.getItem(RELIGION_STORAGE_KEY) as ReligionBranch | null;
+      if (storedReligion === "christian" || storedReligion === "buddhist")
+        setReligionState(storedReligion);
     } catch {
       // ignore
     }
@@ -96,6 +104,18 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const setReligion = useCallback((next: ReligionBranch) => {
+    setReligionState((prev) => {
+      if (prev === next) return prev;
+      try {
+        localStorage.setItem(RELIGION_STORAGE_KEY, next);
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }, []);
+
   const t = useCallback(
     (key: string, params?: Record<string, string | number>) => {
       const str = getByPath(messages[locale], key) ?? getByPath(messages.zh, key) ?? key;
@@ -105,8 +125,8 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   );
 
   const value = useMemo(
-    () => ({ locale, setLocale, t }),
-    [locale, setLocale, t]
+    () => ({ locale, setLocale, religion, setReligion, t }),
+    [locale, setLocale, religion, setReligion, t]
   );
 
   return (

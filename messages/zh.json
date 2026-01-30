@@ -75,5 +75,9 @@
   "locale": {
     "zh": "中文",
     "en": "English"
+  },
+  "religion": {
+    "christian": "基督教",
+    "buddhist": "佛教"
   }
 }

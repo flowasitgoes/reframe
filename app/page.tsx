@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ReligionSwitcher } from "@/components/religion-switcher";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,7 +30,7 @@ interface FormData {
 }
 
 export default function Home() {
-  const { locale } = useLocale();
+  const { locale, religion } = useLocale();
   const t = useTranslations();
   const { toast } = useToast();
   const [result, setResult] = useState<GeneratedResult | null>(null);
@@ -63,7 +64,7 @@ export default function Home() {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, locale }),
+        body: JSON.stringify({ ...data, locale, religion }),
       });
 
       const json = await response.json();
@@ -107,7 +108,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [t, locale, toast, fetchPrayerCount]);
+  }, [t, locale, religion, toast, fetchPrayerCount]);
 
   const handleRegenerate = useCallback(() => {
     if (lastFormData.current) {
@@ -148,7 +149,8 @@ export default function Home() {
                 {t("home.siteName")}
               </h1>
             </div>
-            <div className="flex flex-1 min-w-0 items-center justify-end gap-1" aria-hidden>
+            <div className="flex flex-1 min-w-0 items-center justify-end gap-2" aria-hidden>
+              <ReligionSwitcher disabled={!!result} />
               <LanguageSwitcher disabled={!!result} />
             </div>
           </div>
