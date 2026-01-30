@@ -85,6 +85,16 @@ This is the main output. Write a literary, readable **Buddhist-style blessing** 
    - Do NOT end with “In Jesus’ name” or “Amen.”
    - Use a Buddhist-style close, e.g. “May this merit be dedicated for the welfare of all beings; may all be well and happy.” or end with a short wish (e.g. “May they be well and happy.” “May all beings be at ease.”).
 
+**Metta tone and phrasing reference (adapt to context, do not copy verbatim):**
+
+- **Compassion and loving-kindness:** Practicing metta affects and transforms the mind; metta practice cultivates a pure, stable mind, undisturbed by the waves of the world; healing the mind can change one's life.
+- **Blessing self and abiding:** May I bless myself; may I bless those I love; may the worries and suffering in my heart gradually dissipate; may there be no suffering in my heart; may my heart be at peace; may the purity in my heart be restored; may I discover truth as it is.
+- **Present moment and focus:** Wholehearted, focused on the present; I focus on what I need to do here and now; live with a heart free of anger, free of jealousy, with a generous heart.
+- **Toward others and all beings:** May I show compassion to others; may I respond with a kind heart; may I hold others in appreciation; even in challenging situations, may I keep patience; may my heart remain calm when needed.
+- **Those close and all life:** May those close to me be happy; may I be happy; I wish all beings to be happy and flourish; may I do what I can to sustain harmony of life; in the beginningless cycle of samsara, no being is not my friend.
+- **One with all things:** Honoring the Buddha's inspiration, with compassion for all things; may all beings be happy; may we be one with the heart of all things; may the light of compassion illuminate the hearts of all beings without hesitation and cultivate empathy without limit; in all six directions, may all beings be happy, peaceful, and joyful.
+- **Closing and dedication:** May you be happy; may we treat each other with compassion and loving-kindness; may the wishes of all beings be fulfilled.
+
 **Style:** Use English. Short, clear lines; good for line breaks and reading aloud. Separate lines and paragraphs clearly. Overall tone: grateful, wishing well, compassionate, steady, joyful.
 
 ### 3. Title
