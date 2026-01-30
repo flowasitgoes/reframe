@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
+import { SkyLanternBlessing } from "@/components/sky-lantern-blessing";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ReligionSwitcher } from "@/components/religion-switcher";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -40,6 +41,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const lastFormData = useRef<FormData | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const bottomSentinelRef = useRef<HTMLDivElement | null>(null);
 
   const fetchPrayerCount = useCallback(async () => {
     try {
@@ -207,6 +209,18 @@ export default function Home() {
                 isLoading={isLoading}
               />
             </div>
+            <div
+              ref={bottomSentinelRef}
+              className="h-1 w-full"
+              aria-hidden="true"
+            />
+            <SkyLanternBlessing
+              key={entryId ?? result.reframe ?? "result"}
+              sentinelRef={bottomSentinelRef}
+              blessingCard={result.blessingCard}
+              visible={!!result}
+              resultKey={entryId ?? result.reframe ?? undefined}
+            />
           </section>
         )}
 

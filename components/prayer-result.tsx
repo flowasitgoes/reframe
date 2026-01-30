@@ -452,7 +452,7 @@ export function PrayerResult({
       )}
 
       <div className="flex flex-wrap gap-3 justify-center pt-4">
-        <Button
+        {/* <Button
           variant="outline"
           onClick={onRegenerate}
           disabled={isLoading}
@@ -462,7 +462,7 @@ export function PrayerResult({
             className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
           />
           {t("result.regenerate")}
-        </Button>
+        </Button> */}
         <Button
           variant="outline"
           onClick={() => downloadAs("txt")}

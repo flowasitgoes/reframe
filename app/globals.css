@@ -116,6 +116,181 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* Sky lantern - natural float: ease-in (slow start, like CodePen goup), gentle X drift */
+@keyframes lantern-rise {
+  0% {
+    transform: translateY(120vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    transform: translateY(85vh) translateX(4px) rotate(0.5deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(45vh) translateX(-5px) rotate(-0.8deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-30vh) translateX(6px) rotate(1deg);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-180vh) translateX(-4px) rotate(-0.5deg);
+    opacity: 1;
+  }
+  92% {
+    transform: translateY(-380vh) translateX(3px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-450vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+/* Inner glow pulse - GPU only */
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+/* Flame flicker - GPU only scale */
+@keyframes flame {
+  0%, 100% {
+    transform: translateX(-50%) scaleY(1) scaleX(1);
+  }
+  25% {
+    transform: translateX(-50%) scaleY(1.2) scaleX(0.9);
+  }
+  50% {
+    transform: translateX(-50%) scaleY(0.9) scaleX(1.1);
+  }
+  75% {
+    transform: translateX(-50%) scaleY(1.1) scaleX(0.95);
+  }
+}
+
+/* Stars twinkle */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Firework burst - celebration on sky (GPU: transform + opacity) */
+@keyframes firework-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.9;
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlay-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes blessing-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sky lantern overlay - transition-like fade */
+.sky-lantern-overlay {
+  opacity: 0;
+}
+.sky-lantern-overlay.overlay-enter {
+  animation: overlay-fade-in 0.7s ease-out forwards;
+}
+.sky-lantern-overlay.overlay-exit {
+  animation: overlay-fade-out 0.5s ease-out forwards;
+}
+
+/* Lantern rise - ease-in: slow start then ease up (natural like real ascent) */
+.lantern-rise-item {
+  animation-name: lantern-rise;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.lantern-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.lantern-flame {
+  animation: flame 0.5s ease-in-out infinite;
+}
+
+/* Stars background - radial-gradient dots */
+.sky-lantern-stars {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 90px 40px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 200px 120px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 250px 50px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 300px 180px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 50px 150px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 150px 200px, rgba(255,255,255,0.5), transparent);
+  background-size: 320px 220px;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.firework-burst {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255,220,150,0.9) 0%,
+    rgba(255,180,100,0.5) 25%,
+    rgba(255,140,80,0.2) 50%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%) scale(0);
+  animation: firework-burst 1.4s ease-out forwards;
+  pointer-events: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
