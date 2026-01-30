@@ -135,22 +135,29 @@ export default function Home() {
               </span>
               <span className="hidden sm:inline truncate">ifunlove.com</span>
             </Link>
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="p-1.5 rounded-full bg-primary/10 flex items-center justify-center">
-                <Image
-                  src="/title-icon.png"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="h-10 w-10 object-contain"
-                />
+            <div className="flex flex-col items-center gap-2 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="p-1.5 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Image
+                    src="/title-icon.png"
+                    alt=""
+                    width={40}
+                    height={40}
+                    className="h-10 w-10 object-contain"
+                  />
+                </div>
+                <h1 className="text-2xl md:text-3xl font-serif font-medium text-foreground">
+                  {t("home.siteName")}
+                </h1>
               </div>
-              <h1 className="text-2xl md:text-3xl font-serif font-medium text-foreground">
-                {t("home.siteName")}
-              </h1>
+              <div className="flex sm:hidden" aria-hidden>
+                <ReligionSwitcher disabled={!!result} />
+              </div>
             </div>
             <div className="flex flex-1 min-w-0 items-center justify-end gap-2" aria-hidden>
-              <ReligionSwitcher disabled={!!result} />
+              <div className="hidden sm:flex">
+                <ReligionSwitcher disabled={!!result} />
+              </div>
               <LanguageSwitcher disabled={!!result} />
             </div>
           </div>
