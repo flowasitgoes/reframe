@@ -3,10 +3,11 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
-import { SkyLanternBlessing } from "@/components/sky-lantern-blessing";
+import { SkyLanternBlessing, type SkyLanternReplayRef } from "@/components/sky-lantern-blessing";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ReligionSwitcher } from "@/components/religion-switcher";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { AlertCircle, ArrowLeft, BookOpen, Home as HomeIcon } from "lucide-react";
@@ -42,6 +43,7 @@ export default function Home() {
   const lastFormData = useRef<FormData | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const bottomSentinelRef = useRef<HTMLDivElement | null>(null);
+  const lanternReplayRef = useRef<SkyLanternReplayRef | null>(null);
 
   const fetchPrayerCount = useCallback(async () => {
     try {
@@ -220,6 +222,7 @@ export default function Home() {
               blessingCard={result.blessingCard}
               visible={!!result}
               resultKey={entryId ?? result.reframe ?? undefined}
+              replayRef={lanternReplayRef}
             />
           </section>
         )}
@@ -249,6 +252,19 @@ export default function Home() {
           <p className="text-sm text-muted-foreground mt-4">
             {t("home.footer3")}
           </p>
+          {result?.blessingCard && (
+            <p className="mt-6">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="text-muted-foreground"
+                onClick={() => lanternReplayRef.current?.replay()}
+              >
+                重新播放天燈動畫（開發測試）
+              </Button>
+            </p>
+          )}
           {/* <p className="text-sm text-muted-foreground mt-4">
             如果你正在經歷危機，請撥打{" "}
             <a
