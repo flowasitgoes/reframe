@@ -40,6 +40,8 @@ export default function Home() {
   const [prayerCount, setPrayerCount] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** 第一次天燈動畫結束並關閉後才為 true，用來顯示「重新播放」按鈕 */
+  const [hasSeenFirstAnimationEnd, setHasSeenFirstAnimationEnd] = useState(false);
   const lastFormData = useRef<FormData | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const bottomSentinelRef = useRef<HTMLDivElement | null>(null);
@@ -79,6 +81,7 @@ export default function Home() {
 
       setResult(json);
       setEntryId(null);
+      setHasSeenFirstAnimationEnd(false);
 
       try {
         const { entry_id } = await submitEntry({
@@ -223,6 +226,7 @@ export default function Home() {
               visible={!!result}
               resultKey={entryId ?? result.reframe ?? undefined}
               replayRef={lanternReplayRef}
+              onOverlayClosed={() => setHasSeenFirstAnimationEnd(true)}
             />
           </section>
         )}
@@ -252,8 +256,8 @@ export default function Home() {
           <p className="text-sm text-muted-foreground mt-4">
             {t("home.footer3")}
           </p>
-          {result?.blessingCard && (
-            <p className="mt-6">
+          {result?.blessingCard && hasSeenFirstAnimationEnd && (
+            <p className="mt-6 replay-button-fade-in">
               <Button
                 type="button"
                 variant="outline"

@@ -4,6 +4,33 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+/** 溫柔可愛的開場煙火／鞭炮音效：3 個短促的柔和高音，與開場煙火時機對齊 */
+function playGentleFireworkSound() {
+  if (typeof window === "undefined") return;
+  const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!Ctx) return;
+  const ctx = new Ctx();
+  if (ctx.state === "suspended") ctx.resume();
+
+  const playTone = (when: number, freq: number, duration: number) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, when);
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(0.14, when + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, when + duration);
+    osc.start(when);
+    osc.stop(when + duration);
+  };
+
+  playTone(0, 880, 0.14);
+  playTone(0.2, 988, 0.12);
+  playTone(0.5, 1047, 0.16);
+}
+
 const AUTO_CLOSE_MS = 15000;
 
 const LANTERN_COUNT = 5;
@@ -49,6 +76,8 @@ interface SkyLanternBlessingProps {
   visible: boolean;
   resultKey?: string | null;
   replayRef?: React.MutableRefObject<SkyLanternReplayRef | null>;
+  /** 第一次動畫結束並關閉 overlay 後呼叫，供父層顯示「重新播放」按鈕 */
+  onOverlayClosed?: () => void;
 }
 
 export function SkyLanternBlessing({
@@ -57,6 +86,7 @@ export function SkyLanternBlessing({
   visible,
   resultKey,
   replayRef,
+  onOverlayClosed,
 }: SkyLanternBlessingProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -64,6 +94,8 @@ export function SkyLanternBlessing({
   const lastResultKeyRef = useRef<string | null>(null);
   const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const showDelayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onOverlayClosedRef = useRef(onOverlayClosed);
+  onOverlayClosedRef.current = onOverlayClosed;
 
   const closeOverlay = useCallback(() => {
     setIsExiting(true);
@@ -72,6 +104,7 @@ export function SkyLanternBlessing({
     setTimeout(() => {
       setShowOverlay(false);
       setIsExiting(false);
+      onOverlayClosedRef.current?.();
     }, 500);
   }, []);
 
@@ -96,6 +129,7 @@ export function SkyLanternBlessing({
           showDelayTimerRef.current = setTimeout(() => {
             showDelayTimerRef.current = null;
             hasTriggeredRef.current = true;
+            playGentleFireworkSound();
             setShowOverlay(true);
             autoCloseTimerRef.current = setTimeout(() => {
               closeOverlay();
@@ -135,6 +169,7 @@ export function SkyLanternBlessing({
     if (!replayRef) return;
     replayRef.current = {
       replay: () => {
+        playGentleFireworkSound();
         setShowOverlay(true);
         setIsExiting(false);
         autoCloseTimerRef.current && clearTimeout(autoCloseTimerRef.current);
@@ -241,7 +276,7 @@ export function SkyLanternBlessing({
         ))}
       </div>
       <div
-        className="relative z-10 mx-4 max-w-md px-8 py-6 rounded-2xl bg-black/60 text-white text-center shadow-xl pointer-events-auto"
+        className="relative z-10 mx-4 max-w-md px-10 py-8 rounded-2xl bg-black/60 text-white text-center shadow-xl pointer-events-auto"
         style={{
           animation: "blessing-fade-in 0.6s ease-out 0.9s both",
         }}

@@ -263,6 +263,19 @@
   }
 }
 
+/* 重新播放按鈕：第一次動畫結束後淡入 */
+@keyframes replay-button-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.replay-button-fade-in {
+  animation: replay-button-fade-in 0.5s ease-out forwards;
+}
+
 /* Sky lantern overlay - transition-like fade */
 .sky-lantern-overlay {
   opacity: 0;
