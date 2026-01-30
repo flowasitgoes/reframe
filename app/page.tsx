@@ -261,7 +261,7 @@ export default function Home() {
                 className="text-muted-foreground"
                 onClick={() => lanternReplayRef.current?.replay()}
               >
-                重新播放天燈動畫（開發測試）
+                重新播放天燈動畫
               </Button>
             </p>
           )}
