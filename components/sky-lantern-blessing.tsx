@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const AUTO_CLOSE_MS = 18000;
+const AUTO_CLOSE_MS = 15000;
 
 const LANTERN_COUNT = 5;
 const LANTERN_POSITIONS = [20, 40, 55, 72, 88];
@@ -24,6 +24,37 @@ const FIREWORK_DELAYS = [2, 5.5, 8, 11, 14, 17];
 const FIREWORK_SIZES: ("sm" | "default" | "lg")[] = ["default", "sm", "lg", "sm", "default", "sm"];
 const FIREWORK_COLORS: ("amber" | "purple" | "green")[] = ["amber", "purple", "green", "amber", "green", "purple"];
 const LANTERN_COLORS = ["amber", "orange", "red", "amber", "yellow"] as const;
+
+/** 單一燈籠預覽，供頁面底部調整大小用 */
+export function LanternPreview({
+  scale = 1,
+  color = "amber",
+}: {
+  scale?: number;
+  color?: "amber" | "orange" | "red" | "yellow";
+}) {
+  return (
+    <div
+      className="inline-block origin-bottom"
+      style={{ transform: `scale(${scale})` }}
+    >
+      <div className="sky-lantern-wrap" data-color={color}>
+        <div className="sky-lantern-handle" aria-hidden />
+        <div className="sky-lantern-inner-sway">
+          <div className="sky-lantern-chain" aria-hidden />
+          <div className="sky-lantern-head" aria-hidden />
+          <div className="sky-lantern-body">
+            <div className="sky-lantern-spark" aria-hidden />
+            <div className="sky-lantern-spark" aria-hidden />
+            <div className="sky-lantern-spark" aria-hidden />
+            <div className="sky-lantern-flame" aria-hidden />
+          </div>
+          <div className="sky-lantern-base" aria-hidden />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export interface SkyLanternReplayRef {
   replay: () => void;
@@ -197,13 +228,13 @@ export function SkyLanternBlessing({
         ))}
       </div>
       <div
-        className="relative z-10 mx-4 max-w-md px-6 py-6 rounded-2xl bg-black/60 text-white text-center shadow-xl pointer-events-auto"
+        className="relative z-10 mx-4 max-w-md px-10 py-8 rounded-2xl bg-black/60 text-white text-center shadow-xl pointer-events-auto"
         style={{
           animation: "blessing-fade-in 0.6s ease-out 0.9s both",
         }}
       >
         <p className="text-lg md:text-xl leading-relaxed whitespace-pre-wrap font-serif">
-          {blessingCard}
+          {blessingCard?.replace(/，/g, "，\n") ?? ""}
         </p>
       </div>
       <Button

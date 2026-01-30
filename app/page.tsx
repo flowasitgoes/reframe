@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { ReflectionForm } from "@/components/reflection-form";
 import { PrayerResult } from "@/components/prayer-result";
-import { SkyLanternBlessing, type SkyLanternReplayRef } from "@/components/sky-lantern-blessing";
+import { SkyLanternBlessing, LanternPreview, type SkyLanternReplayRef } from "@/components/sky-lantern-blessing";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ReligionSwitcher } from "@/components/religion-switcher";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -40,6 +40,7 @@ export default function Home() {
   const [prayerCount, setPrayerCount] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lanternPreviewScale, setLanternPreviewScale] = useState(1);
   const lastFormData = useRef<FormData | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const bottomSentinelRef = useRef<HTMLDivElement | null>(null);
@@ -261,28 +262,40 @@ export default function Home() {
                 className="text-muted-foreground"
                 onClick={() => lanternReplayRef.current?.replay()}
               >
-                重新播放天燈動畫（開發測試）
+                重新播放天燈動畫
               </Button>
             </p>
           )}
-          {/* <p className="text-sm text-muted-foreground mt-4">
-            如果你正在經歷危機，請撥打{" "}
-            <a
-              href="tel:1925"
-              className="text-primary hover:underline font-medium"
-            >
-              生命線 1925
-            </a>{" "}
-            或{" "}
-            <a
-              href="tel:1980"
-              className="text-primary hover:underline font-medium"
-            >
-              安心專線 1980
-            </a>
-            。
-          </p> */}
         </footer>
+
+        {/* 燈籠預覽：可調整大小，方便告訴開發要改的尺寸 */}
+        <section className="max-w-2xl mx-auto mt-12 pt-8 border-t border-border">
+          <div className="rounded-xl border border-border bg-muted/30 p-6">
+            <p className="text-sm font-medium text-foreground mb-2">燈籠預覽（可調整大小）</p>
+            <p className="text-xs text-muted-foreground mb-4">
+              拖動滑桿後看燈籠大小，記下你喜歡的數字（例如 1.2）再告訴我要改怎樣。
+            </p>
+            <div className="flex flex-wrap items-end gap-6">
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-xs text-muted-foreground mb-1">
+                  大小：<strong className="text-foreground">{lanternPreviewScale.toFixed(1)}</strong>×
+                </label>
+                <input
+                  type="range"
+                  min={0.5}
+                  max={2}
+                  step={0.1}
+                  value={lanternPreviewScale}
+                  onChange={(e) => setLanternPreviewScale(Number(e.target.value))}
+                  className="w-full h-2 rounded-full appearance-none bg-muted accent-primary"
+                />
+              </div>
+              <div className="flex items-end justify-center min-h-[80px] pb-2">
+                <LanternPreview scale={lanternPreviewScale} color="amber" />
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );
