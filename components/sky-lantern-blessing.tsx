@@ -23,7 +23,6 @@ const FIREWORK_POSITIONS = [
 const FIREWORK_DELAYS = [2, 5.5, 8, 11, 14, 17];
 const FIREWORK_SIZES: ("sm" | "default" | "lg")[] = ["default", "sm", "lg", "sm", "default", "sm"];
 const FIREWORK_COLORS: ("amber" | "purple" | "green")[] = ["amber", "purple", "green", "amber", "green", "purple"];
-const LANTERN_COLORS = ["amber", "orange", "red", "amber", "yellow"] as const;
 
 export interface SkyLanternReplayRef {
   replay: () => void;
@@ -167,9 +166,10 @@ export function SkyLanternBlessing({
         {Array.from({ length: LANTERN_COUNT }).map((_, i) => (
           <div
             key={i}
-            className={`lantern-rise-item lantern-rise-item--${LANTERN_DRIFT[i]} absolute w-12 h-14 bottom-0 pointer-events-none will-change-transform`}
+            className={`lantern-rise-item lantern-rise-item--${LANTERN_DRIFT[i]} absolute w-12 bottom-0 pointer-events-none will-change-transform`}
             style={{
               left: `${LANTERN_POSITIONS[i]}%`,
+              height: "64px",
               animationDelay: `${LANTERN_DELAYS[i]}s`,
               animationDuration: `${LANTERN_DURATIONS[i]}s`,
             }}
@@ -178,18 +178,17 @@ export function SkyLanternBlessing({
               className="absolute bottom-0 left-1/2 origin-bottom"
               style={{ transform: `translateX(-50%) scale(${LANTERN_SCALES[i]})` }}
             >
-              <div className="sky-lantern-wrap" data-color={LANTERN_COLORS[i]}>
-                <div className="sky-lantern-handle" aria-hidden />
+              <div className="sky-lantern-wrap">
                 <div className="sky-lantern-inner-sway">
-                  <div className="sky-lantern-chain" aria-hidden />
-                  <div className="sky-lantern-head" aria-hidden />
-                  <div className="sky-lantern-body">
-                    <div className="sky-lantern-spark" aria-hidden />
-                    <div className="sky-lantern-spark" aria-hidden />
-                    <div className="sky-lantern-spark" aria-hidden />
-                    <div className="sky-lantern-flame" aria-hidden />
-                  </div>
+                  <div className="sky-lantern-outer-glow" aria-hidden />
+                  <div className="sky-lantern-top" aria-hidden />
+                  <div className="sky-lantern-bottom" aria-hidden />
                   <div className="sky-lantern-base" aria-hidden />
+                  <div className="sky-lantern-inner-glow" aria-hidden />
+                  <div className="sky-lantern-flame-container" aria-hidden>
+                    <div className="sky-lantern-flame" />
+                    <div className="sky-lantern-flame-glow" />
+                  </div>
                 </div>
               </div>
             </div>

@@ -287,133 +287,168 @@
   animation-name: lantern-rise-drift-right;
 }
 
-/* Traditional Eastern paper lantern (round top cap, chain, head, body, sparks, flame, base) */
+/* Taiwan sky lantern - reference style: round top + square bottom (親切溫柔) */
 .sky-lantern-wrap {
-  --c-body: hsl(30, 55%, 38%);
-  --c-light: hsl(38, 92%, 78%);
-  --c-glow: hsl(25, 85%, 62%);
+  --c-amber: #fcd34d;
+  --c-orange: #f97316;
+  --c-red: #dc2626;
+  --c-red-dark: #b91c1c;
+  --c-red-base: #7f1d1d;
+  --c-glow: rgba(251, 146, 60, 0.25);
+  --c-inner: rgba(254, 249, 195, 0.5);
   position: relative;
   width: 48px;
-  height: 56px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+/* 外層發光 */
+.sky-lantern-outer-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: var(--c-glow);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+/* 天燈頂部（圓弧） */
+.sky-lantern-top {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 62%;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(
+    to bottom,
+    var(--c-amber) 0%,
+    var(--c-orange) 50%,
+    var(--c-red) 100%
+  );
+  opacity: 0.95;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* 天燈底部（方形） */
+.sky-lantern-bottom {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72%;
+  height: 28%;
+  background: linear-gradient(
+    to bottom,
+    var(--c-red) 0%,
+    var(--c-red-dark) 100%
+  );
+  opacity: 0.95;
+  border-radius: 0 0 4px 4px;
+}
+
+/* 天燈底座 */
+.sky-lantern-base {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48%;
+  height: 10%;
+  max-height: 6px;
+  background: var(--c-red-base);
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 內部光暈脈動 */
+.sky-lantern-inner-glow {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 65%;
+  height: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--c-inner);
+  animation: sky-lantern-glow-pulse 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* 火焰容器 */
+.sky-lantern-flame-container {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
+  pointer-events: none;
 }
 
-/* Top cap: soft round disc (traditional paper lantern top, no horn shape) */
-.sky-lantern-handle {
-  width: 32px;
-  height: 6px;
-  background: var(--c-body);
-  border-radius: 50%;
-  margin-bottom: 1px;
-  flex-shrink: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-}
-
-.sky-lantern-chain {
-  width: 2px;
-  height: 2px;
-  background: var(--c-body);
-  box-shadow: 0 2px 0 var(--c-body), 0 5px 0 var(--c-body);
-  border-radius: 1px;
-  flex-shrink: 0;
-}
-
-.sky-lantern-head {
-  width: 28px;
-  height: 4px;
-  background: var(--c-body);
-  border-radius: 50%;
-  margin: 0 auto;
-  flex-shrink: 0;
-}
-
-.sky-lantern-body {
-  position: relative;
-  width: 32px;
-  height: 26px;
-  margin: 0 auto;
-  flex-shrink: 0;
-}
-
-/* Paper-like body: round shape, soft glow (nostalgic, warm) */
-.sky-lantern-body::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--c-light) 0%, hsl(38, 88%, 72%) 100%);
-  border: 2px solid var(--c-body);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4),
-    inset 0 0 0 8px var(--c-glow),
-    0 0 14px var(--c-glow),
-    0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
-.sky-lantern-spark {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  left: calc(50% - 6px);
-  top: calc(50% - 6px);
-  background: radial-gradient(circle, var(--c-light) 50%, transparent 50%);
-  border-radius: 50%;
-  animation: lantern-spark-rotate 3s linear infinite;
-  opacity: 0.8;
-}
-
-.sky-lantern-spark:nth-child(2) {
-  animation-delay: 0.5s;
-  width: 8px;
-  height: 8px;
-  left: calc(50% - 4px);
-  top: calc(50% - 4px);
-}
-
-.sky-lantern-spark:nth-child(3) {
-  animation-delay: 1s;
-  width: 5px;
-  height: 5px;
-  left: calc(50% - 2.5px);
-  top: calc(50% - 2.5px);
-}
-
+/* 火焰主體 */
 .sky-lantern-flame {
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  width: 10px;
-  height: 12px;
-  margin-left: -5px;
-  background: radial-gradient(ellipse at center bottom, var(--c-light) 30%, var(--c-glow) 60%, transparent 70%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: flame-flicker 0.5s ease-in-out infinite;
+  width: 6px;
+  height: 14px;
+  background: linear-gradient(
+    to top,
+    #ea580c 0%,
+    #facc15 50%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: sky-lantern-flame 0.4s ease-in-out infinite;
   transform-origin: center bottom;
 }
 
-.sky-lantern-base {
-  width: 22px;
-  height: 3px;
-  background: var(--c-body);
+/* 火焰光暈 */
+.sky-lantern-flame-glow {
+  width: 12px;
+  height: 6px;
+  margin-top: -3px;
+  background: linear-gradient(
+    to top,
+    transparent 0%,
+    rgba(251, 146, 60, 0.55) 100%
+  );
   border-radius: 50%;
-  margin: -1px auto 0;
-  flex-shrink: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  filter: blur(3px);
 }
 
 .sky-lantern-inner-sway {
   animation: lantern-sway 1.2s ease-in-out alternate infinite;
   transform-origin: top center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes lantern-spark-rotate {
-  to {
-    transform: rotate(360deg);
+@keyframes sky-lantern-glow-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(1.12);
+  }
+}
+
+@keyframes sky-lantern-flame {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  25% {
+    transform: scaleY(1.25) scaleX(0.88);
+  }
+  50% {
+    transform: scaleY(0.9) scaleX(1.1);
+  }
+  75% {
+    transform: scaleY(1.1) scaleX(0.95);
   }
 }
 
@@ -426,36 +461,6 @@
   }
 }
 
-@keyframes flame-flicker {
-  0%, 100% {
-    transform: scaleY(1) scaleX(1);
-  }
-  50% {
-    transform: scaleY(1.15) scaleX(0.92);
-  }
-}
-
-/* Per-lantern color variants (warm, paper-like, nostalgic) */
-.sky-lantern-wrap[data-color="amber"] {
-  --c-body: hsl(32, 50%, 40%);
-  --c-light: hsl(42, 90%, 80%);
-  --c-glow: hsl(38, 80%, 62%);
-}
-.sky-lantern-wrap[data-color="orange"] {
-  --c-body: hsl(26, 55%, 38%);
-  --c-light: hsl(34, 92%, 78%);
-  --c-glow: hsl(22, 85%, 60%);
-}
-.sky-lantern-wrap[data-color="red"] {
-  --c-body: hsl(12, 50%, 38%);
-  --c-light: hsl(26, 88%, 78%);
-  --c-glow: hsl(8, 80%, 60%);
-}
-.sky-lantern-wrap[data-color="yellow"] {
-  --c-body: hsl(38, 55%, 42%);
-  --c-light: hsl(48, 92%, 84%);
-  --c-glow: hsl(44, 82%, 65%);
-}
 
 /* Stars background - radial-gradient dots */
 .sky-lantern-stars {
