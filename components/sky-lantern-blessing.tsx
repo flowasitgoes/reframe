@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const AUTO_CLOSE_MS = 18000;
+const AUTO_CLOSE_MS = 15000;
 
 const LANTERN_COUNT = 5;
 const LANTERN_POSITIONS = [20, 40, 55, 72, 88];
@@ -196,13 +196,13 @@ export function SkyLanternBlessing({
         ))}
       </div>
       <div
-        className="relative z-10 mx-4 max-w-md px-6 py-6 rounded-2xl bg-black/60 text-white text-center shadow-xl pointer-events-auto"
+        className="relative z-10 mx-4 max-w-md px-8 py-6 rounded-2xl bg-black/60 text-white text-center shadow-xl pointer-events-auto"
         style={{
           animation: "blessing-fade-in 0.6s ease-out 0.9s both",
         }}
       >
         <p className="text-lg md:text-xl leading-relaxed whitespace-pre-wrap font-serif">
-          {blessingCard}
+          {blessingCard?.replace(/，/g, "，\n") ?? ""}
         </p>
       </div>
       <Button
