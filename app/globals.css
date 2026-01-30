@@ -287,12 +287,174 @@
   animation-name: lantern-rise-drift-right;
 }
 
-.lantern-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
+/* Traditional Eastern paper lantern (round top cap, chain, head, body, sparks, flame, base) */
+.sky-lantern-wrap {
+  --c-body: hsl(30, 55%, 38%);
+  --c-light: hsl(38, 92%, 78%);
+  --c-glow: hsl(25, 85%, 62%);
+  position: relative;
+  width: 48px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.lantern-flame {
-  animation: flame 0.5s ease-in-out infinite;
+/* Top cap: soft round disc (traditional paper lantern top, no horn shape) */
+.sky-lantern-handle {
+  width: 32px;
+  height: 6px;
+  background: var(--c-body);
+  border-radius: 50%;
+  margin-bottom: 1px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.sky-lantern-chain {
+  width: 2px;
+  height: 2px;
+  background: var(--c-body);
+  box-shadow: 0 2px 0 var(--c-body), 0 5px 0 var(--c-body);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.sky-lantern-head {
+  width: 28px;
+  height: 4px;
+  background: var(--c-body);
+  border-radius: 50%;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+.sky-lantern-body {
+  position: relative;
+  width: 32px;
+  height: 26px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+/* Paper-like body: round shape, soft glow (nostalgic, warm) */
+.sky-lantern-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--c-light) 0%, hsl(38, 88%, 72%) 100%);
+  border: 2px solid var(--c-body);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+    inset 0 0 0 8px var(--c-glow),
+    0 0 14px var(--c-glow),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.sky-lantern-spark {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: calc(50% - 6px);
+  top: calc(50% - 6px);
+  background: radial-gradient(circle, var(--c-light) 50%, transparent 50%);
+  border-radius: 50%;
+  animation: lantern-spark-rotate 3s linear infinite;
+  opacity: 0.8;
+}
+
+.sky-lantern-spark:nth-child(2) {
+  animation-delay: 0.5s;
+  width: 8px;
+  height: 8px;
+  left: calc(50% - 4px);
+  top: calc(50% - 4px);
+}
+
+.sky-lantern-spark:nth-child(3) {
+  animation-delay: 1s;
+  width: 5px;
+  height: 5px;
+  left: calc(50% - 2.5px);
+  top: calc(50% - 2.5px);
+}
+
+.sky-lantern-flame {
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 10px;
+  height: 12px;
+  margin-left: -5px;
+  background: radial-gradient(ellipse at center bottom, var(--c-light) 30%, var(--c-glow) 60%, transparent 70%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: flame-flicker 0.5s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.sky-lantern-base {
+  width: 22px;
+  height: 3px;
+  background: var(--c-body);
+  border-radius: 50%;
+  margin: -1px auto 0;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.sky-lantern-inner-sway {
+  animation: lantern-sway 1.2s ease-in-out alternate infinite;
+  transform-origin: top center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes lantern-spark-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes lantern-sway {
+  0% {
+    transform: rotateZ(1deg);
+  }
+  100% {
+    transform: rotateZ(-1deg);
+  }
+}
+
+@keyframes flame-flicker {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  50% {
+    transform: scaleY(1.15) scaleX(0.92);
+  }
+}
+
+/* Per-lantern color variants (warm, paper-like, nostalgic) */
+.sky-lantern-wrap[data-color="amber"] {
+  --c-body: hsl(32, 50%, 40%);
+  --c-light: hsl(42, 90%, 80%);
+  --c-glow: hsl(38, 80%, 62%);
+}
+.sky-lantern-wrap[data-color="orange"] {
+  --c-body: hsl(26, 55%, 38%);
+  --c-light: hsl(34, 92%, 78%);
+  --c-glow: hsl(22, 85%, 60%);
+}
+.sky-lantern-wrap[data-color="red"] {
+  --c-body: hsl(12, 50%, 38%);
+  --c-light: hsl(26, 88%, 78%);
+  --c-glow: hsl(8, 80%, 60%);
+}
+.sky-lantern-wrap[data-color="yellow"] {
+  --c-body: hsl(38, 55%, 42%);
+  --c-light: hsl(48, 92%, 84%);
+  --c-glow: hsl(44, 82%, 65%);
 }
 
 /* Stars background - radial-gradient dots */

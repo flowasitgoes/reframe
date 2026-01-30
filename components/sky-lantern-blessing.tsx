@@ -10,7 +10,7 @@ const LANTERN_COUNT = 5;
 const LANTERN_POSITIONS = [20, 40, 55, 72, 88];
 const LANTERN_DELAYS = [0, 2.5, 5, 7.5, 10];
 const LANTERN_DURATIONS = [12, 14, 13, 15, 13.5];
-const LANTERN_SCALES = [0.88, 1.06, 0.92, 1.02, 0.9];
+const LANTERN_SCALES = [0.96, 1.1, 0.98, 1.06, 0.94];
 const LANTERN_DRIFT: ("left" | "right")[] = ["left", "right", "left", "right", "left"];
 const FIREWORK_POSITIONS = [
   { left: "18%", top: "25%" },
@@ -23,13 +23,7 @@ const FIREWORK_POSITIONS = [
 const FIREWORK_DELAYS = [2, 5.5, 8, 11, 14, 17];
 const FIREWORK_SIZES: ("sm" | "default" | "lg")[] = ["default", "sm", "lg", "sm", "default", "sm"];
 const FIREWORK_COLORS: ("amber" | "purple" | "green")[] = ["amber", "purple", "green", "amber", "green", "purple"];
-const LANTERN_GRADIENTS = [
-  "from-amber-400/95 to-amber-600/90",
-  "from-orange-400/95 to-orange-600/90",
-  "from-red-400/90 to-red-600/85",
-  "from-amber-300/95 to-amber-500/90",
-  "from-amber-500/95 to-amber-700/90",
-];
+const LANTERN_COLORS = ["amber", "orange", "red", "amber", "yellow"] as const;
 
 export interface SkyLanternReplayRef {
   replay: () => void;
@@ -173,7 +167,7 @@ export function SkyLanternBlessing({
         {Array.from({ length: LANTERN_COUNT }).map((_, i) => (
           <div
             key={i}
-            className={`lantern-rise-item lantern-rise-item--${LANTERN_DRIFT[i]} absolute w-10 h-12 bottom-0 pointer-events-none will-change-transform`}
+            className={`lantern-rise-item lantern-rise-item--${LANTERN_DRIFT[i]} absolute w-12 h-14 bottom-0 pointer-events-none will-change-transform`}
             style={{
               left: `${LANTERN_POSITIONS[i]}%`,
               animationDelay: `${LANTERN_DELAYS[i]}s`,
@@ -181,27 +175,23 @@ export function SkyLanternBlessing({
             }}
           >
             <div
-              className="absolute inset-0 origin-center"
-              style={{ transform: `scale(${LANTERN_SCALES[i]})` }}
+              className="absolute bottom-0 left-1/2 origin-bottom"
+              style={{ transform: `translateX(-50%) scale(${LANTERN_SCALES[i]})` }}
             >
-              <div
-                className={`absolute inset-0 rounded-t-[1.2rem] rounded-b-lg bg-gradient-to-b ${LANTERN_GRADIENTS[i]} shadow-[0_0_20px_8px_rgba(251,191,36,0.35)]`}
-                style={{
-                  boxShadow: "0 0 24px 10px rgba(251,191,36,0.35), inset 0 0 14px rgba(255,255,255,0.25)",
-                }}
-              />
-              <div
-                className="lantern-glow-pulse absolute left-1/2 top-1/2 w-6 h-8 rounded-full bg-amber-200/40 blur-md"
-                aria-hidden
-              />
-              <div
-                className="lantern-flame absolute -bottom-1 left-1/2 w-2 h-3 rounded-b-full bg-amber-600/90 origin-bottom"
-                aria-hidden
-              />
-              <div
-                className="absolute -top-1 left-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-amber-800/70"
-                aria-hidden
-              />
+              <div className="sky-lantern-wrap" data-color={LANTERN_COLORS[i]}>
+                <div className="sky-lantern-handle" aria-hidden />
+                <div className="sky-lantern-inner-sway">
+                  <div className="sky-lantern-chain" aria-hidden />
+                  <div className="sky-lantern-head" aria-hidden />
+                  <div className="sky-lantern-body">
+                    <div className="sky-lantern-spark" aria-hidden />
+                    <div className="sky-lantern-spark" aria-hidden />
+                    <div className="sky-lantern-spark" aria-hidden />
+                    <div className="sky-lantern-flame" aria-hidden />
+                  </div>
+                  <div className="sky-lantern-base" aria-hidden />
+                </div>
+              </div>
             </div>
           </div>
         ))}
