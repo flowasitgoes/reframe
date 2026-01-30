@@ -170,7 +170,7 @@ export function buildSafetyResponse(style: PrayerStyle) {
 願此刻的我能被溫柔接住，
 願有人傾聽、有人陪伴。
 
-當我感到軟弱的時候，
+當我感到脆弱的時候，
 願我記得可以尋求幫助。
 當我看不見前方的時候，
 願我願意跨出下一步。
