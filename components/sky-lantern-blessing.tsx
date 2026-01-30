@@ -12,6 +12,17 @@ const LANTERN_DELAYS = [0, 2.5, 5, 7.5, 10];
 const LANTERN_DURATIONS = [12, 14, 13, 15, 13.5];
 const LANTERN_SCALES = [0.96, 1.1, 0.98, 1.06, 0.94];
 const LANTERN_DRIFT: ("left" | "right")[] = ["left", "right", "left", "right", "left"];
+/* 開場煙火：動畫一開始就放（0s、0.2s、0.5s） */
+const OPENING_FIREWORK_POSITIONS = [
+  { left: "50%", top: "35%" },
+  { left: "28%", top: "40%" },
+  { left: "72%", top: "42%" },
+];
+const OPENING_FIREWORK_DELAYS = [0, 0.2, 0.5];
+const OPENING_FIREWORK_SIZES: ("sm" | "default" | "lg")[] = ["lg", "default", "default"];
+const OPENING_FIREWORK_COLORS: ("amber" | "purple" | "green")[] = ["amber", "amber", "amber"];
+
+/* 後續煙火：分散在 2s～17s */
 const FIREWORK_POSITIONS = [
   { left: "18%", top: "25%" },
   { left: "72%", top: "30%" },
@@ -23,6 +34,10 @@ const FIREWORK_POSITIONS = [
 const FIREWORK_DELAYS = [2, 5.5, 8, 11, 14, 17];
 const FIREWORK_SIZES: ("sm" | "default" | "lg")[] = ["default", "sm", "lg", "sm", "default", "sm"];
 const FIREWORK_COLORS: ("amber" | "purple" | "green")[] = ["amber", "purple", "green", "amber", "green", "purple"];
+
+/* 鞭炮串：底部一排小火花，依序爆開 */
+const FIRECRACKER_COUNT = 9;
+const FIRECRACKER_BOTTOM_PERCENT = 12;
 
 export interface SkyLanternReplayRef {
   replay: () => void;
@@ -150,6 +165,36 @@ export function SkyLanternBlessing({
         className="sky-lantern-stars absolute inset-0 z-[1] pointer-events-none opacity-60"
         aria-hidden
       />
+      {/* 開場煙火：動畫一開始就放 */}
+      {OPENING_FIREWORK_POSITIONS.map((pos, i) => (
+        <div
+          key={`opening-${i}`}
+          className={`firework-burst absolute z-[1] ${OPENING_FIREWORK_SIZES[i] === "sm" ? "firework-burst--sm" : OPENING_FIREWORK_SIZES[i] === "lg" ? "firework-burst--lg" : ""} ${OPENING_FIREWORK_COLORS[i] === "purple" ? "firework-burst--purple" : OPENING_FIREWORK_COLORS[i] === "green" ? "firework-burst--green" : ""}`}
+          style={{
+            left: pos.left,
+            top: pos.top,
+            animationDelay: `${OPENING_FIREWORK_DELAYS[i]}s`,
+          }}
+          aria-hidden
+        />
+      ))}
+      {/* 鞭炮串：底部依序爆開 */}
+      <div
+        className="firecracker-string absolute left-0 right-0 z-[1] pointer-events-none"
+        style={{ bottom: `${FIRECRACKER_BOTTOM_PERCENT}%` }}
+        aria-hidden
+      >
+        {Array.from({ length: FIRECRACKER_COUNT }).map((_, i) => (
+          <div
+            key={i}
+            className="firecracker-dot absolute"
+            style={{
+              left: `${(i + 1) * (100 / (FIRECRACKER_COUNT + 1))}%`,
+              animationDelay: `${i * 0.06}s`,
+            }}
+          />
+        ))}
+      </div>
       {FIREWORK_POSITIONS.map((pos, i) => (
         <div
           key={i}
